@@ -1,0 +1,6 @@
+.with-bg {
+  background-image: url('/assets/customer-care.jpeg');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+}

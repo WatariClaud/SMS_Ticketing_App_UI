@@ -1,0 +1,22 @@
+.notifier {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  z-index: 1000; /* Ensure it's on top of other elements */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.success {
+  background-color: green;
+}
+
+.error {
+  background-color: red;
+}

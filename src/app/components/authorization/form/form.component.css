@@ -1,0 +1,58 @@
+form {
+  margin: 0;
+  height: 100%;
+}
+
+.gridded {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  height: 100vh; /* Adjust as needed */
+}
+
+
+.has-padding {
+	padding: 1rem;
+}
+
+.input-box {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.input-box label {
+  margin-bottom: 10px;
+}
+
+.input-box input,
+.input-box select {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+input[type="text"], 
+select {
+  width: 100%;
+}
+
+.btn {
+  background-color: #4A90E2; /* A contrasting blue color */
+  color: white; /* White text for good contrast */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Top/Bottom and Left/Right padding */
+  font-size: 16px; /* Font size for readability */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+.btn:hover {
+  background-color: #357ABD; /* Slightly darker blue on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.btn:active {
+  background-color: #2C6B9F; /* Even darker blue when button is clicked */
+}

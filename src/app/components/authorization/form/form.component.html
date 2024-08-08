@@ -1,0 +1,36 @@
+<app-notifier
+  [message]="notificationMessage"
+  [type]="notificationType"
+></app-notifier>
+<form>
+  <div class="has-padding">
+    <h3>Generate New User Ticket</h3>
+    <div class="input-box">
+      <label>Username</label>
+      <input type="text" name="customer_name" />
+    </div>
+    <div class="input-box">
+      <label>Service</label>
+      <select>
+        <option value="" selected disabled>Select service</option>
+        <option value="">To update later</option>
+        <option value="">To update later</option>
+        <option value="">To update later</option>
+        <option value="">To update later</option>
+      </select>
+    </div>
+    <div class="input-box">
+      <label>Referred by</label>
+      <input type="text" name="customer_name_referrer" />
+    </div>
+    <br /><br />
+    <div class="input-box">
+      <div class="current-time">Current Time: {{ currentTime }}</div>
+    </div>
+    <div class="input-box">
+      <button class="btn" (click)="createTicket($event, 'argument')">
+        Create Ticket
+      </button>
+    </div>
+  </div>
+</form>
