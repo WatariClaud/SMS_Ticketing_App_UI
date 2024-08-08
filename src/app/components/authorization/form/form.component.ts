@@ -1,11 +1,26 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NotifierComponent } from '../../notifier/notifier/notifier.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
+
 
 @Component({
   selector: 'app-form-component',
   standalone: true,
-  imports: [RouterOutlet, NotifierComponent],
+  imports: [
+    RouterOutlet,
+    NotifierComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCardModule,
+  ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
