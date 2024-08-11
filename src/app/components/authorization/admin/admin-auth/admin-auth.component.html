@@ -1,0 +1,16 @@
+<div class="gridded">
+  <app-has-bg-image></app-has-bg-image>
+  <app-form-component
+    FormTitle="Admin Sign In"
+    [FormInputs]="[
+    {
+      id: 'email_address', title: 'email_address'
+    },
+    {
+      id: 'password', title: 'password'
+    }
+    ]"
+    isGuardAuth="false"
+    isAdminAuth="true"
+  ></app-form-component>
+</div>

@@ -1,0 +1,22 @@
+@if(hasValidTicket !== 'true') {
+  <div class="error">
+    <h1>Invalid ticket action</h1>
+    <h2><a href="/">Click here</a> to validate your action</h2>
+  </div>
+} @else {
+  <div class="success">
+    <h3>Thank you for visiting our offices.<br/>These are your ticket details</h3>
+    <br/><br/>
+    <table>
+      <thead>
+        <td>Ticket ID: <span class="spanned">#{{ ticket.id }}</span></td>
+        <td>Customer Name: <span class="spanned">{{ customer_name }}</span></td>
+        <td>Requesting service: <span class="spanned">{{ service_name }}</span></td>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <br/><br/>
+    <p><strong>Initiated On: </strong>{{ started_on }}</p>
+  </div>
+}

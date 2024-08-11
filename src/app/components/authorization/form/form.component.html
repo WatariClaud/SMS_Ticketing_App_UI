@@ -1,38 +1,75 @@
 <app-notifier [message]="notificationMessage" [type]="notificationType"></app-notifier>
-<form>
+<form FormGroup="authForm">
   <div class="has-padding">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Generate New User Ticket</mat-card-title>
+        <mat-card-title>{{ FormTitle }}</mat-card-title>
       </mat-card-header>
+      <br/><br/>
       <mat-card-content>
-        <mat-form-field appearance="fill" class="input-box">
-          <mat-label>Username</mat-label>
-          <input matInput type="text" name="customer_name" />
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="input-box">
-          <mat-label>Service</mat-label>
-          <mat-select>
-            <mat-option value="" disabled>Select service</mat-option>
-            <mat-option value="update_later_1">To update later</mat-option>
-            <mat-option value="update_later_2">To update later</mat-option>
-            <mat-option value="update_later_3">To update later</mat-option>
-            <mat-option value="update_later_4">To update later</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="input-box">
-          <mat-label>Referred by</mat-label>
-          <input matInput type="text" name="customer_name_referrer" />
-        </mat-form-field>
+        @if(isGuardAuth === 'false') {
+          @for(input of FormInputs; track input.id) {
+            <mat-form-field appearance="fill" class="input-box">
+              <mat-label>{{ input.title }}</mat-label>
+              @if(input.title) {
+                @if(input.title === 'mobile_number') {
+                  <input matInput type="tel" name="mobile_number" #mobileNumber />
+                }
+                @if(input.title === 'service_needed') {
+                  <mat-select (selectionChange)="onServiceChange($event)">
+                  <mat-option value="" disabled>Select service</mat-option>
+                  @if(services_available.length === 0) {
+                    <mat-option value="update_later_1">No services available</mat-option>
+                  } @else {
+                    @for(service of services_available; track service.id) {
+                      <mat-option value="{{ service.id }}">{{ service.title }}</mat-option>
+                    }
+                  }
+                  </mat-select>
+                }
+                @if(input.title === 'referred_by') {
+                  <input matInput type="text" name="referred_by" #ref_by/>
+                }
+                @if(input.title === 'email_address') {
+                  <input matInput type="email" name="email" #email_address/>
+                }
+                @if(input.title === 'password') {
+                  <input matInput type="password" name="password" #password/>
+                }
+              }
+            </mat-form-field>
+          }
+        } @else if(isGuardAuth === 'true'){
+          <mat-form-field appearance="fill" class="input-box">
+            <mat-label>Guard's Name</mat-label>
+            <mat-select name="security_guard_name" (selectionChange)="onGuardChange($event)">
+              <mat-option value="" disabled>Select Guard's name</mat-option>
+              @if(FormInputs.length === 0) {
+                <mat-option value="none">No services available</mat-option>
+              } @else {
+                @for(guard of FormInputs; track guard.id) {
+                  <mat-option value="{{ guard.id }}">{{ guard.name }}</mat-option>
+                }
+              }
+            </mat-select>
+          </mat-form-field>
+        }
         <div class="input-box">
-          <div class="current-time">Current Time: {{ currentTime }}</div>
+          <div class="current-time">Current Time: <span>{{ currentTime }}</span></div>
         </div>
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" class="btn" (click)="createTicket($event, 'argument')">
-          Create Ticket
-        </button>
-      </mat-card-actions>
+      <div class="input-box">
+        <div class="ml">
+          <mat-card-actions>
+            @if(isGuardAuth === 'false') {
+              <app-button [ButtonText]="isAdminAuth === 'true' ? 'Sign In' : 'Create Ticket'" [ButtonEvent]="isAdminAuth === 'true' ? authenticateAdmin.bind(this) : createTicket.bind(this)"></app-button>
+            }
+            @else if(isGuardAuth === 'true') {
+              <app-button ButtonText="Authenticate" [ButtonEvent]="startGuardSession.bind(this)" (hasValidInput)="has_valid_selected"></app-button>
+            }
+          </mat-card-actions>
+        </div>
+      </div>
     </mat-card>
   </div>
 </form>

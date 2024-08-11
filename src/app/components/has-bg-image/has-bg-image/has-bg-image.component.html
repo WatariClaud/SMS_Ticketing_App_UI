@@ -1,1 +1,7 @@
-<div class="with-bg"></div>
+@if(is_admin_route) {
+  <div class="with-bg-admin"></div>
+} @else if(is_guard_route) {
+  <div class="with-bg-guard"></div>
+} @else {
+  <div class="with-bg"></div>
+}

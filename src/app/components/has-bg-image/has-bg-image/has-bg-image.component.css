@@ -1,6 +1,14 @@
-.with-bg {
-  background-image: url('/assets/customer-care.jpeg');
+.with-bg, .with-bg-admin, .with-bg-guard {
   background-size: cover;
   background-position: center;
   height: 100%;
+}
+.with-bg {
+  background-image: url('/assets/customer-care.jpeg');
+}
+.with-bg-admin {
+  background-image: url('/assets/admin.png');
+}
+.with-bg-guard {
+  background-image: url('/assets/guard.png');
 }

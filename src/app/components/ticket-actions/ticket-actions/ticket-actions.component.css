@@ -1,0 +1,62 @@
+.error, .success {
+  width: 80vw;
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.error h1 {
+  color: #ff4c4c;
+}
+
+.error h2 a {
+  color: #ff4c4c;
+  text-decoration: none;
+}
+
+.error h2 a:hover {
+  text-decoration: underline;
+}
+
+.success p {
+  margin: 10px 0;
+}
+
+.success table {
+  width: 100%;
+  margin-bottom: 15px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.success table thead {
+  font-weight: bold;
+  background-color: #f4f4f4;
+}
+
+.success table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: block;
+}
+
+.success p strong {
+  font-weight: bold;
+}
+
+.success p:last-child {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #555;
+}
+.spanned {
+  font-weight: 200;
+}

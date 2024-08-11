@@ -1,6 +1,5 @@
-// create user model with the following fields: id, username, ref_number, mobile_number, is_engineer, referred_by
 export interface User {
-  id: string;
+  id: number;
   username: string;
   ref_number: string;
   mobile_number: string;
