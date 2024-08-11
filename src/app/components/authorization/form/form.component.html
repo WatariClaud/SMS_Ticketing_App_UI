@@ -1,36 +1,38 @@
-<app-notifier
-  [message]="notificationMessage"
-  [type]="notificationType"
-></app-notifier>
+<app-notifier [message]="notificationMessage" [type]="notificationType"></app-notifier>
 <form>
   <div class="has-padding">
-    <h3>Generate New User Ticket</h3>
-    <div class="input-box">
-      <label>Username</label>
-      <input type="text" name="customer_name" />
-    </div>
-    <div class="input-box">
-      <label>Service</label>
-      <select>
-        <option value="" selected disabled>Select service</option>
-        <option value="">To update later</option>
-        <option value="">To update later</option>
-        <option value="">To update later</option>
-        <option value="">To update later</option>
-      </select>
-    </div>
-    <div class="input-box">
-      <label>Referred by</label>
-      <input type="text" name="customer_name_referrer" />
-    </div>
-    <br /><br />
-    <div class="input-box">
-      <div class="current-time">Current Time: {{ currentTime }}</div>
-    </div>
-    <div class="input-box">
-      <button class="btn" (click)="createTicket($event, 'argument')">
-        Create Ticket
-      </button>
-    </div>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Generate New User Ticket</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="input-box">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" name="customer_name" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="input-box">
+          <mat-label>Service</mat-label>
+          <mat-select>
+            <mat-option value="" disabled>Select service</mat-option>
+            <mat-option value="update_later_1">To update later</mat-option>
+            <mat-option value="update_later_2">To update later</mat-option>
+            <mat-option value="update_later_3">To update later</mat-option>
+            <mat-option value="update_later_4">To update later</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="input-box">
+          <mat-label>Referred by</mat-label>
+          <input matInput type="text" name="customer_name_referrer" />
+        </mat-form-field>
+        <div class="input-box">
+          <div class="current-time">Current Time: {{ currentTime }}</div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" class="btn" (click)="createTicket($event, 'argument')">
+          Create Ticket
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </form>
