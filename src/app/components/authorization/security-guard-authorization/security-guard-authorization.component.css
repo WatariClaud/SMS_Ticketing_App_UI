@@ -3,3 +3,15 @@
     grid-template-columns: 65% 35%;
     height: 100vh;
   }
+
+  @media (max-width: 1024px) {
+    .gridded {
+      grid-template-columns: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gridded {
+      grid-template-columns: 100%;
+    }
+  }

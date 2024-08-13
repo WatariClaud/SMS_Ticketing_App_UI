@@ -1,5 +1,3 @@
 .gridded {
-  display: grid;
-  grid-template-columns: 65% 35%;
   height: 100vh;
 }

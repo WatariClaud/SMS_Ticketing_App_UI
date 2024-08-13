@@ -1,10 +1,5 @@
 <div class="gridded">
   <app-has-bg-image></app-has-bg-image>
-  <app-form-component
-    FormTitle="Start new security person session"
-    [FormInputs]="guards_enrolled"
-    isGuardAuth="true"
-    [selectedGuardId]="selectedGuardId"
-    (guardSelected)="onGuardSelected($event)"
-  ></app-form-component>
-</div> 
+  <app-form-component FormTitle="Start new security person session" [FormInputs]="guards_enrolled" isGuardAuth="true"
+    [selectedGuardId]="selectedGuardId" (guardSelected)="onGuardSelected($event)"></app-form-component>
+</div>

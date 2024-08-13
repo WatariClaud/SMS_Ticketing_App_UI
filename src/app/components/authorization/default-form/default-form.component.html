@@ -1,12 +1,14 @@
-<div class="gridded">
+<div class="gridded row">
+  <div class="col-12 col-md-6 col-lg-8">
     <app-has-bg-image></app-has-bg-image>
-    <app-form-component
-    [FormTitle]="is_engineer_route ? 'Generate New Engineer Ticket' : 'Generate New User Ticket'"
-    [FormInputs]="is_engineer_route ? 
+  </div>
+  <div class="col-12 col-md-6 col-lg-4">
+    <app-form-component [FormTitle]="is_engineer_route ? 'Generate New Engineer Ticket' : 'Generate New User Ticket'"
+      [FormInputs]="is_engineer_route ?
       [
         {
         id: 'mobile_number', title: 'mobile_number'
-        }, 
+        },
         {
         id: 'service_needed', title: 'service_needed'
         }
@@ -14,17 +16,14 @@
       [
         {
         id: 'mobile_number', title: 'mobile_number'
-        }, 
+        },
         {
         id: 'service_needed', title: 'service_needed'
         },
         {
         id: 'referred_by', title: 'referred_by'
         }
-      ]"
-    isGuardAuth="false"
-    [selectedServiceId]="selectedServiceId"
-    (serviceSelected)="onServiceSelected($event)"
-    isAdminAuth="false"
-    ></app-form-component>
+      ]" isGuardAuth="false" [selectedServiceId]="selectedServiceId" (serviceSelected)="onServiceSelected($event)"
+      isAdminAuth="false"></app-form-component>
   </div>
+</div>

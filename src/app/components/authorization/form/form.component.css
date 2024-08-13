@@ -7,9 +7,6 @@ form {
   background-color: #333742;
 }
 
-mat-card {
-  border-radius: 2px;
-}
 
 .gridded {
   display: grid;
