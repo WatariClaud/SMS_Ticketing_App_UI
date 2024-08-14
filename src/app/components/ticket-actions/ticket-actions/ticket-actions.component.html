@@ -18,7 +18,7 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <h3>Thank you for visiting our offices.<br />These are your ticket details</h3>
+        <h4>Thank you for visiting our offices.<br />These are your ticket details:</h4>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -38,17 +38,19 @@
       </table>
       <mat-list>
         <mat-list-item>
-          <strong>Ticket ID:</strong> <span>{{ ticket.id }}</span>
+          <strong>Ticket ID:</strong> <span >#{{ ticket.id }}</span>
         </mat-list-item>
         <mat-list-item>
-          <strong>Customer Name:</strong> <span>{{ customer_name }}</span>
+          <strong>Customer Name:</strong> <span> {{ customer_name }}</span>
         </mat-list-item>
         <mat-list-item>
-          <strong>Requesting Service:</strong> <span>{{ service_name }}</span>
+          <strong>Requesting Service:</strong> <span> {{ service_name }}</span>
         </mat-list-item>
       </mat-list>
       <p><strong>Initiated On:</strong> {{ started_on }}</p>
     </mat-card-content>
   </mat-card>
+  <br>
+  <a href="/">New Ticket</a>
 </div>
 }

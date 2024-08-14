@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HasBgImageComponent } from '../../has-bg-image/has-bg-image/has-bg-image.component';
 import { FormComponent } from '../form/form.component';
 
@@ -13,7 +13,7 @@ import { FormComponent } from '../form/form.component';
 export class DefaultFormComponent {
   selectedServiceId: string = '';
   is_engineer_route: boolean = false;
-  
+
   constructor(private router: Router) {
     this.is_engineer_route = this.router.url.includes('/engineer');
   }

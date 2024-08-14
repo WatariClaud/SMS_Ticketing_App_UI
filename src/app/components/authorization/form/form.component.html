@@ -45,7 +45,7 @@
           <mat-select name="security_guard_name" (selectionChange)="onGuardChange($event)">
             <mat-option value="" disabled>Select Guard's name</mat-option>
             @if(FormInputs.length === 0) {
-            <mat-option value="none">No services available</mat-option>
+            <mat-option value="none">No guards available</mat-option>
             } @else {
             @for(guard of FormInputs; track guard.id) {
             <mat-option value="{{ guard.id }}">{{ guard.name }}</mat-option>
@@ -55,7 +55,7 @@
         </mat-form-field>
         }
         <div class="input-box">
-          <div class="current-time">Current Time: <span>{{ currentTime }}</span></div>
+          <app-current-time></app-current-time>
         </div>
       </mat-card-content>
       <div class="input-box">
