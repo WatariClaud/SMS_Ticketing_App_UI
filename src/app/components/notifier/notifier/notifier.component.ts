@@ -16,7 +16,6 @@ export class NotifierComponent implements OnChanges {
   isError: boolean = false;
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('notifier running...', { changes });
     if (changes['type']) {
       this.isSuccess = this.type === 'success';
       this.isError = this.type === 'error';

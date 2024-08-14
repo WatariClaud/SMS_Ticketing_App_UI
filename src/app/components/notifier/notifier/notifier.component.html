@@ -1,5 +1,6 @@
 @if(message) {
-<div [ngClass]="{ success: isSuccess, error: isError }" class="notifier">
-  {{ message }}
-</div>
+  <div [ngClass]="{ success: isSuccess, error: isError }" class="notifier">
+    <span class="notifier-msg">{{ message }}</span>
+    <!-- <p class="close_notifer">X</p> -->
+  </div>
 }

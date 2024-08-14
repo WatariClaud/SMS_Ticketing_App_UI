@@ -4,16 +4,21 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: #333742;
 }
+
 
 .gridded {
   display: grid;
   grid-template-columns: 65% 35%;
-  height: 100vh; /* Adjust as needed */
+  height: 100vh;
 }
 
 .has-padding {
   padding: 1rem;
+}
+.ml {
+  margin-left: 7px;
 }
 
 .input-box {
@@ -39,26 +44,6 @@ select {
   width: 100%;
 }
 
-.btn {
-  background-color: #4A90E2; /* A contrasting blue color */
-  color: white; /* White text for good contrast */
-  border: none;
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Top/Bottom and Left/Right padding */
-  font-size: 16px; /* Font size for readability */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
-}
-
-.btn:hover {
-  background-color: #357ABD; /* Slightly darker blue on hover */
-  transform: scale(1.05); /* Slight zoom effect */
-}
-
-.btn:active {
-  background-color: #2C6B9F; /* Even darker blue when button is clicked */
-}
-
 .mat-card {
   border-radius: 0;
 }
@@ -80,6 +65,10 @@ select {
 }
 
 .current-time {
-  font-size: 14px;
+  font-size: 18px;
   margin-top: 16px;
+}
+.current-time span {
+  color: rgb(255, 98, 0);
+  font-weight: 600;
 }
