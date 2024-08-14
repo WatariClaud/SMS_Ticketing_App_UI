@@ -12,6 +12,7 @@ export const routes: Routes = [
   { path: 'engineer', component: DefaultFormComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminAuthComponent, canActivate: [AuthGuard] },
   { path: 'hr', component: TellerComponent },
+  { path: 'hr/activity/current', component: TellerComponent },
   { path: 'security/authenticate', component: SecurityGuardAuthorizationComponent, canActivate: [AuthGuard] },
   { path: 'ticket_create/success', component: TicketActionsComponent },
   { path: 'ticket_create/error', component: TicketActionsComponent },

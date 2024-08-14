@@ -1,0 +1,38 @@
+<div class="main">
+  <app-notifier [message]="notificationMessage" [type]="notificationType"></app-notifier>
+  @if (isTeller) {
+    @if(has_current) {
+      <h3>You are currently serving customer:</h3>
+      <table>
+        <hr>
+        <div class="separator"></div>
+        <tr>{{ customer_name }}</tr>
+        <div class="separator"></div>
+        <tr>Consultation started at: {{ started_on }}</tr>
+        <tr><app-current-time [startTime]="ticket.start_time"></app-current-time></tr>
+        <br>
+        <hr>
+        <tr><button class="btn" (click)="closeSession()">Close Session</button></tr>
+      </table>
+    } @else {
+      <h3>You have no current activity, please wait:</h3>
+    }
+  }
+
+  <!-- admin section -->
+  @if (isAdmin) {
+    @if(has_current) {
+      <h3>You are currently serving customer:</h3>
+      <table>
+        <hr>
+        <div class="separator"></div>
+        <tr>{{ customer_name }}</tr>
+        <div class="separator"></div>
+        <tr>Consultation started at: {{ started_on }}</tr>
+        <tr><app-current-time [startTime]="ticket.start_time"></app-current-time></tr>
+      </table>
+    } @else {
+      <h3>You have no current activity, please wait:</h3>
+    }
+  }
+</div>

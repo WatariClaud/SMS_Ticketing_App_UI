@@ -7,5 +7,13 @@ export const users: User[] = [
     mobile_number: "+254705724562",
     is_engineer: false,
     referred_by: ""
-  }
+  },
+  {
+    id: 2,
+    username: "Gift Mwaiseghe",
+    ref_number: "1111111111",
+    mobile_number: "+254712860997",
+    is_engineer: false,
+    referred_by: ""
+  },
 ]

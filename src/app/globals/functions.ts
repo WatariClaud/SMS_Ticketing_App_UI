@@ -38,3 +38,7 @@ export const formatTimestamp = (isoString: Date) => {
   return `${yy}-${mm}-${dd} at ${hh}:${min}:${ss}`;
 };
 
+export const showNotification = (message: string, type: 'success' | 'error') => {
+  return { message, type };
+}
+

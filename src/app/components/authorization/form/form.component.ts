@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { NotifierComponent } from '../../notifier/notifier/notifier.component';
+import { CurrentTimeComponent } from '../../current_time/current-time/current-time.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { ButtonComponent } from '../button/button.component';
-import { FormControl, FormsModule } from '@angular/forms';
-import { inject, tick } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { Activity, Ticket } from '../../../models/Ticket';
 import { users } from '../../../dummy-data/user';
 import guards_enrolled from '../../../dummy-data/guards_enrolled';
@@ -24,12 +24,13 @@ import { services_available } from '../../../dummy-data/services_available';
     MatSelectModule,
     MatCardModule,
     ButtonComponent,
-    FormsModule
+    FormsModule,
+    CurrentTimeComponent
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
-export class FormComponent implements OnInit, OnDestroy {
+export class FormComponent {
   constructor(private router: Router) {}
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
@@ -42,7 +43,6 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() serviceSelected: EventEmitter<number> = new EventEmitter<number>();
 
   title = 'app-form-component';
-  currentTime: string = '';
   private intervalId: any;
   notificationMessage: string | null = null;
   notificationType: string = 'error';
@@ -53,22 +53,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
   @ViewChild('email_address') emailAddressInput!: ElementRef<HTMLInputElement>;
   @ViewChild('password')passwordInput!: ElementRef<HTMLInputElement>;
-
-  ngOnInit(): void {
-    this.updateTime();
-    this.intervalId = setInterval(() => this.updateTime(), 1000);
-  }
-
-  ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
-
-  private updateTime(): void {
-    const now = new Date();
-    this.currentTime = now.toLocaleTimeString();
-  }
 
   createTicket(event: Event, argument: string): void {
     event.preventDefault();
