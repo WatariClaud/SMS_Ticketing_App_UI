@@ -62,8 +62,13 @@
         <div class="ml">
           <mat-card-actions>
             @if(isGuardAuth === 'false') {
-            <app-button [ButtonText]="isAdminAuth === 'true' ? 'Sign In' : 'Create Ticket'"
-              [ButtonEvent]="isAdminAuth === 'true' ? authenticateAdmin.bind(this) : createTicket.bind(this)"></app-button>
+            <div class="flex">
+              <app-button [ButtonText]="isAdminAuth === 'true' ? 'Sign In' : 'Create Ticket'"
+                [ButtonEvent]="isAdminAuth === 'true' ? authenticateAdmin.bind(this) : createTicket.bind(this)"></app-button>
+
+              <!-- end session button -->
+              <app-button ButtonText="End Session" [ButtonEvent]="endSession.bind(this)"></app-button>
+            </div>
             }
             @else if(isGuardAuth === 'true') {
             <app-button ButtonText="Authenticate" [ButtonEvent]="startGuardSession.bind(this)"

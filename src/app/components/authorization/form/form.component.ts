@@ -12,6 +12,7 @@ import { Activity, Ticket } from '../../../models/Ticket';
 import { users } from '../../../dummy-data/user';
 import guards_enrolled from '../../../dummy-data/guards_enrolled';
 import { services_available } from '../../../dummy-data/services_available';
+import { SessionStorageService } from '../../../services/session/session-storage.service';
 
 @Component({
   selector: 'app-form-component',
@@ -31,7 +32,10 @@ import { services_available } from '../../../dummy-data/services_available';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private sessionService: SessionStorageService,
+  ) { }
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
   @Input() isGuardAuth: string = 'false';
@@ -52,7 +56,7 @@ export class FormComponent {
   @ViewChild('ref_by') referredByInput!: ElementRef<HTMLInputElement>;
 
   @ViewChild('email_address') emailAddressInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('password')passwordInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('password') passwordInput!: ElementRef<HTMLInputElement>;
 
   createTicket(event: Event, argument: string): void {
     event.preventDefault();
@@ -80,7 +84,7 @@ export class FormComponent {
     }
     const mobileNumber = this.mobileNumberInput.nativeElement.value;
     const referredBy = this.referredByInput.nativeElement.value;
-    if((!mobileNumber || !this.selectedServiceId) || (mobileNumber === '' || this.selectedServiceId === '')) {
+    if ((!mobileNumber || !this.selectedServiceId) || (mobileNumber === '' || this.selectedServiceId === '')) {
       return this.showNotification('Invalid inputs', 'error');
     }
     this.showNotification('Ticket created...', 'success');
@@ -113,7 +117,7 @@ export class FormComponent {
     const email_address = this.emailAddressInput.nativeElement.value;
     const password = this.passwordInput.nativeElement.value;
 
-    if((!email_address || !password) || (email_address === '' || password === '')) {
+    if ((!email_address || !password) || (email_address === '' || password === '')) {
       return this.showNotification('Invalid credentials', 'error');
     }
     // simulate backend POST
@@ -121,7 +125,7 @@ export class FormComponent {
   }
   startGuardSession(event: Event, argument: string): void {
     event.preventDefault();
-    if(!this.has_valid_selected) {
+    if (!this.has_valid_selected) {
       return this.showNotification('Invalid guard ID', 'error')
     }
     localStorage.setItem('authorized_guard', this.selectedGuardId);
@@ -129,7 +133,7 @@ export class FormComponent {
   }
   onGuardChange(event: any): void {
     const selectedId = parseInt(event.value, 10);
-    console.log({selectedId})
+    console.log({ selectedId })
     this.guardSelected.emit(selectedId);
     this.has_valid_selected = true;
     this.selectedGuardId = event.value;
@@ -149,4 +153,11 @@ export class FormComponent {
 
   // simulate services from backend
   services_available = services_available;
+
+  endSession() {
+    this.sessionService.endSession();
+
+    // refresh the page
+    window.location.reload();
+  }
 }
