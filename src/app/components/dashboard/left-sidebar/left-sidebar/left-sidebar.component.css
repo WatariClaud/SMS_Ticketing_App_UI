@@ -1,7 +1,7 @@
 .sidebar {
   width: 250px;
   height: 100%;
-  background-color: #2c3e50;
+  background-color: #0D111D;
   color: #ecf0f1;
   position: fixed;
   top: 0;
@@ -14,7 +14,7 @@
 }
 .toggle-btn {
   width: 100%;
-  background-color: #34495e;
+  background-color: #171B26;
   border: none;
   color: #ecf0f1;
   padding: 15px;
@@ -64,6 +64,6 @@
   display: none;
 }
 .menu a:hover, .menu a.active {
-  background-color: #2980b9;
+  background-color: #171B26;
   color: #fff;
 }
