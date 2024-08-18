@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy, OnInit, Inject } from '@angular/core';
+import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
 import { NotifierComponent } from '../../notifier/notifier/notifier.component';
 import { CurrentTimeComponent } from '../../current_time/current-time/current-time.component';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,8 @@ import { users } from '../../../dummy-data/user';
 import guards_enrolled from '../../../dummy-data/guards_enrolled';
 import { services_available } from '../../../dummy-data/services_available';
 import { SessionStorageService } from '../../../services/session/session-storage.service';
+import { roles } from '../../../models/Ticket';
+import { CreateUserService } from '../../../services/api-calls/create-user.service';
 
 @Component({
   selector: 'app-form-component',
@@ -34,15 +36,26 @@ import { SessionStorageService } from '../../../services/session/session-storage
 export class FormComponent implements OnInit, OnDestroy {
   currentTime: string | undefined;
   sessionService: any;
-  constructor(private router: Router) {}
+  isLoadingRequest: boolean = false;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private createUserService: CreateUserService,
+    private sessionStorageService: SessionStorageService
+  ) {}
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
   @Input() isGuardAuth: string = 'false';
   @Input() isAdminAuth: string = 'false';
+  @Input() isAddingNewUser: boolean = false;
+  @Input() isAuthenticatingUser: boolean = false;
   @Input() selectedGuardId: string = '';
   @Input() selectedServiceId: string = '';
+  selectedRole: string = '';
+  selectedRoleId: string = '';
+  hidden: boolean = true;
 
-  @Output() guardSelected: EventEmitter<number> = new EventEmitter<number>();
+  @Output() selectionSelected: EventEmitter<number> = new EventEmitter<number>();
   @Output() serviceSelected: EventEmitter<number> = new EventEmitter<number>();
 
   title = 'app-form-component';
@@ -54,12 +67,23 @@ export class FormComponent implements OnInit, OnDestroy {
   @ViewChild('mobileNumber') mobileNumberInput!: ElementRef<HTMLInputElement>;
   @ViewChild('ref_by') referredByInput!: ElementRef<HTMLInputElement>;
 
+  @ViewChild('name') nameInput!: ElementRef<HTMLInputElement>;
   @ViewChild('email_address') emailAddressInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('password')passwordInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('password') passwordInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('user_role') roleInput!: ElementRef<HTMLSelectElement>;
+  @ViewChild('teller_counter_name') teller_counter_nameInput!: ElementRef<HTMLInputElement>;
+
+  roles = roles;
+  path: string = '';
 
   ngOnInit(): void {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 1000);
+    
+    this.activatedRoute.url.subscribe(urlSegments => {
+      this.path = urlSegments.map(segment => segment.path).join('/');
+      this.modifyArrayBasedOnPath();
+    });
   }
 
   ngOnDestroy(): void {
@@ -75,7 +99,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
   createTicket(event: Event, argument: string): void {
     event.preventDefault();
-    console.log('creating ticket...')
     let ticket: Ticket = {
       id: 0,
       by_user: 0,
@@ -138,6 +161,53 @@ export class FormComponent implements OnInit, OnDestroy {
     // simulate backend POST
     this.showNotification('Authenticated, logging in', 'success')
   }
+
+  addUser(event: Event) {
+    event.preventDefault();
+    this.isLoadingRequest = true;
+    const payload = {
+      email: this.emailAddressInput.nativeElement.value,
+      name: this.nameInput.nativeElement.value,
+      password: this.passwordInput.nativeElement.value,
+      role: this.selectedRole,
+    };
+    this.createUserService.createUser(payload)
+    .subscribe({
+      next: (data: any) => {
+        this.isLoadingRequest = false;
+        if(data.error_invalid_input) this.showNotification('Invalid Input', 'error');  
+        if(!data) this.showNotification('Email exists', 'error'); 
+        if(data.id) {
+          this.showNotification('Created Successfully', 'success');
+          this.router.navigate(['/hr'])
+        }
+      }
+    });
+  }
+
+  authUser(event: Event) {
+    event.preventDefault();
+    this.isLoadingRequest = true;
+    const payload = {
+      email: this.emailAddressInput.nativeElement.value,
+      password: this.passwordInput.nativeElement.value
+    };
+    this.createUserService.loginUser(payload)
+    .subscribe({
+      next: (data: any) => {
+        this.isLoadingRequest = false;
+        if(data.error_invalid_input) this.showNotification('Invalid Input', 'error');  
+        if(!data) this.showNotification('User does not exist', 'error'); 
+        if(data.jwt) {
+          this.showNotification('Authenticated Successfully', 'success');
+          // localStorage.setItem('user_token', data.jwt);
+          this.sessionStorageService.startSession(data.jwt);
+          this.router.navigate(['/hr'])
+        }
+      }
+    });
+  }
+
   startGuardSession(event: Event, argument: string): void {
     event.preventDefault();
     if (!this.has_valid_selected) {
@@ -146,10 +216,18 @@ export class FormComponent implements OnInit, OnDestroy {
     localStorage.setItem('authorized_guard', this.selectedGuardId);
     this.router.navigate(['/']);
   }
+  onRoleChange(event: any): void {
+    const selectedId = parseInt(event.value, 10);
+    this.selectionSelected.emit(selectedId);
+    this.has_valid_selected = true;
+    this.selectedRoleId = event.value;
+    this.selectedRole = roles.find((role) => role.id === parseInt(this.selectedRoleId, 10))?.title || '';
+    console.log('selected role: ', this.selectedRole);
+  }
   onGuardChange(event: any): void {
     const selectedId = parseInt(event.value, 10);
     console.log({ selectedId })
-    this.guardSelected.emit(selectedId);
+    this.selectionSelected.emit(selectedId);
     this.has_valid_selected = true;
     this.selectedGuardId = event.value;
   }
@@ -174,5 +252,10 @@ export class FormComponent implements OnInit, OnDestroy {
 
     // refresh the page
     window.location.reload();
+  }
+  modifyArrayBasedOnPath() {
+    if (this.path !== 'create-teller') {
+      this.roles.splice(0, 1);
+    }
   }
 }

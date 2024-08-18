@@ -6,12 +6,15 @@ import { TicketActionsComponent } from './components/ticket-actions/ticket-actio
 import { AdminAuthComponent } from './components/authorization/admin/admin-auth/admin-auth.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './auth.guard';
+import { UserComponent } from './components/authorization/user/user/user.component';
 
 export const routes: Routes = [
   { path: '', component: DefaultFormComponent, canActivate: [AuthGuard] },
   { path: 'engineer', component: DefaultFormComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminAuthComponent, canActivate: [AuthGuard] },
   { path: 'hr', component: TellerComponent },
+  { path: 'create-user', component: UserComponent },
+  { path: 'login-user', component: UserComponent },
   { path: 'hr/activity/current', component: TellerComponent },
   { path: 'security/authenticate', component: SecurityGuardAuthorizationComponent, canActivate: [AuthGuard] },
   { path: 'ticket_create/success', component: TicketActionsComponent },

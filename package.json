@@ -23,6 +23,7 @@
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "ngx-cookie-service": "^18.0.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.3",
     "zone.js": "^0.14.10"

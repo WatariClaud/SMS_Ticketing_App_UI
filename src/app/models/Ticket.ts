@@ -20,3 +20,22 @@ export interface Activity {
   created_on: Date;
   closed_on: Date
 }
+
+export const roles = [
+  {
+    id: 1,
+    title: 'Teller'
+  },
+  {
+    id: 2,
+    title: 'Admin'
+  },
+  {
+    id: 3,
+    title: 'Security'
+  },
+  {
+    id: 4,
+    title: 'Admin'
+  },
+]

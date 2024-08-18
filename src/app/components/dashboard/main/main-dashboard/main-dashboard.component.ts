@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { Ticket, Activity } from '../../../../models/Ticket';
 import { users } from '../../../../dummy-data/user';
 import { services_available } from '../../../../dummy-data/services_available';
 import { formatTimestamp } from '../../../../globals/functions';
 import { CurrentTimeComponent } from '../../../current_time/current-time/current-time.component';
 import { NotifierComponent } from '../../../notifier/notifier/notifier.component';
+import { GetUserService } from '../../../../services/api-calls/get-user.service';
+import { SessionStorageService } from '../../../../services/session/session-storage.service';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -17,6 +19,10 @@ import { NotifierComponent } from '../../../notifier/notifier/notifier.component
   styleUrl: './main-dashboard.component.css'
 })
 export class MainDashboardComponent implements OnInit{
+  constructor(
+    private getUserService: GetUserService,
+    private sessionStorageService: SessionStorageService
+  ) {}
   @Input() isTeller: boolean = false;
   @Input() isAdmin: boolean = false;
   
@@ -60,7 +66,7 @@ export class MainDashboardComponent implements OnInit{
 
     if (this.hasValidTicket && ticket.id) {
       this.has_current = true;
-      this.customer_name = users.find((user) => user.id === ticket.by_user)?.username || '',
+      this.customer_name = users.find((user) => user.id === ticket.by_user)?.name || '',
       this.service_name = services_available.find((service) => service.id === activity.next_station)?.title || '',
       this.started_on = formatTimestamp(ticket.start_time);
 
@@ -71,6 +77,13 @@ export class MainDashboardComponent implements OnInit{
         created_by: ticket.created_by
       }
     }
+
+    this.getUserService.getUser(this.sessionStorageService.getToken())
+    .subscribe({
+      next: (data: any) => {
+        console.log({data});
+      }
+    });;
   }
   closeSession() {
     return this.showNotification('Still building', 'success');

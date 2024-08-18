@@ -3,6 +3,7 @@
     <app-has-bg-image></app-has-bg-image>
   </div>
   <div class="col-12 col-md-6 col-lg-4">
+    <app-button ButtonText="End Session" [ButtonEvent]="endSession.bind(this)" [endSession]="true"></app-button>
     <app-form-component [FormTitle]="is_engineer_route ? 'Generate New Engineer Ticket' : 'Generate New User Ticket'"
       [FormInputs]="is_engineer_route ?
       [

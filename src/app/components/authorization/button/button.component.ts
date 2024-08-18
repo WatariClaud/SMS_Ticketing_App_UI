@@ -12,12 +12,16 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './button.component.html',
   styleUrl: './button.component.css'
 })
-export class ButtonComponent{
+export class ButtonComponent implements OnInit{
   @Input() ButtonText = '';
   @Input() ButtonEvent: any;
   @Input() hasValidInput: string = '';
+  @Input() endSession!: boolean;
   
   onButtonClick(event: Event) {
     this.ButtonEvent(event, 'argument');
+  }
+  ngOnInit(): void {
+    console.log(this.endSession)
   }
 }

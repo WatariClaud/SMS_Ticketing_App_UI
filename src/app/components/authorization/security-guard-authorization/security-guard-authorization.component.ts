@@ -13,7 +13,7 @@ import guards_enrolled from '../../../dummy-data/guards_enrolled';
 export class SecurityGuardAuthorizationComponent {
   selectedGuardId: string = '';
   
-  onGuardSelected(guardId: number): void {
+  onGuardSelected(guardId: any): void {
     this.selectedGuardId = guardId.toString();
   }
 

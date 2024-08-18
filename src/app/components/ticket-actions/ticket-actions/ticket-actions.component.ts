@@ -55,7 +55,7 @@ export class TicketActionsComponent implements OnInit {
     if (this.hasValidTicket && this.ticket_details) {
       const ticket: Ticket = JSON.parse(this.ticket_details);
       const activity: Activity = JSON.parse(this.ticket_activity_details);
-      this.customer_name = users.find((user) => user.id === ticket.by_user)?.username || '',
+      this.customer_name = users.find((user) => user.id === ticket.by_user)?.name || '',
         this.service_name = services_available.find((service) => service.id === activity.next_station)?.title || '',
         this.started_on = formatTimestamp(ticket.start_time);
 

@@ -63,3 +63,12 @@ select {
   display: flex;
   justify-content: flex-end;
 }
+
+.spacing {
+  margin-right: 2rem;
+}
+.mat-select {
+  background: rgba(220, 220, 220, 0.647);
+  min-height: 50px;
+  padding: 1rem;
+}
