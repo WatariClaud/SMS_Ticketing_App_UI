@@ -4,24 +4,26 @@ import { CookieService } from 'ngx-cookie-service';
 
 export const sendRequest = (data: any, url: string, method: string, token: string): Observable<any> => {
   // Determine whether to include a body based on the method
-   const fetchOptions: RequestInit = {
-     method,
-     headers: {
-       'Content-Type': 'application/json',
-       'Authorization': `Bearer ${token}`
-     }
-   };
- 
-   if (method !== 'GET') {
-    // fetchOptions.headers.Authorization = `Bearer ${token}`;
-     fetchOptions.body = JSON.stringify(data);
-   }
+  const fetchOptions: RequestInit = {
+    method,
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+  };
+
+  if (method !== 'GET') {
+    fetchOptions.body = JSON.stringify(data);
+  }
+  if (method === 'GET') {
+    (fetchOptions.headers as Headers).set('Authorization', `Bearer ${token}`);
+  }
 
    // using native fetch API here for quick debug class constructor
    return from(
      fetch(url, fetchOptions)
        .then(response => {
          if (!response.ok) {
+          console.log({response})
            throw new Error('Network response was not ok');
          }
          return response.json();

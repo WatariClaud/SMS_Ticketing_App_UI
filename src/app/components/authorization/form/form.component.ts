@@ -171,6 +171,7 @@ export class FormComponent implements OnInit, OnDestroy {
     console.log("creating desk");
   }
   async authenticateAdmin(event: Event, argument: string) {
+    this.isLoadingRequest = true;
     const email_address = this.emailAddressInput.nativeElement.value;
     const password = this.passwordInput.nativeElement.value;
 
@@ -187,13 +188,14 @@ export class FormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: any) => {
           this.isLoadingRequest = false;
-          if(data.error_invalid_input) this.showNotification('Invalid Input', 'error');  
+          console.log({data});
           if(!data) this.showNotification('User does not exist', 'error'); 
-          if(data.jwt) {
+          if(data.error_invalid_input) this.showNotification('Invalid Input', 'error');  
+          if(data.access) {
+            this.isLoadingRequest = false;
             this.showNotification('Authenticated, logging in', 'success')
-            // localStorage.setItem('user_token', data.jwt);
-            this.sessionStorageService.startSession(data.jwt);
-            this.router.navigate(['/hr'])
+            this.sessionStorageService.startSession(data.access);
+            // this.router.navigate(['/hr'])
           }
         }
       });
