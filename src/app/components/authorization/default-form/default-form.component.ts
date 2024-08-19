@@ -35,10 +35,9 @@ export class DefaultFormComponent implements OnInit {
     this.createTicketService.create_ref_no()
     .subscribe({
       next: (data) => {
-        console.log({data});
         this.ref_no = data.ref_no;
+        console.clear();
       }
     })
   }
-
 }

@@ -28,7 +28,7 @@ export class CreateUserService {
         error_invalid_input: true
       });
     }
-    return sendRequest(payload, CREATE_USER, 'POST');
+    return sendRequest(payload, CREATE_USER, 'POST', '');
   }
   loginUser(payload: any): Observable<any> {
     const {
@@ -40,6 +40,6 @@ export class CreateUserService {
         error_invalid_input: true
       });
     }
-    return sendRequest(payload, AUTH_USER, 'POST');
+    return sendRequest(payload, AUTH_USER, 'POST', '');
   }
 }

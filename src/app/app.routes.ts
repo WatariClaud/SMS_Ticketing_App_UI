@@ -7,11 +7,13 @@ import { AdminAuthComponent } from './components/authorization/admin/admin-auth/
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './auth.guard';
 import { UserComponent } from './components/authorization/user/user/user.component';
+import { StationManagementComponent } from './components/authorization/admin/station-management/station-management/station-management.component';
 
 export const routes: Routes = [
   { path: '', component: DefaultFormComponent, canActivate: [AuthGuard] },
   { path: 'engineer', component: DefaultFormComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminAuthComponent, canActivate: [AuthGuard] },
+  { path: 'admin/add-helpdesk', component: StationManagementComponent, canActivate: [AuthGuard] },
   { path: 'hr', component: TellerComponent },
   { path: 'create-user', component: UserComponent },
   { path: 'login-user', component: UserComponent },

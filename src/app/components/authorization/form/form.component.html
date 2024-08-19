@@ -28,6 +28,9 @@
               </mat-select>
             }
             @if(input.title === 'referred_by') {
+              <input matInput type="text" name="managed_by" #managed_by />
+            }
+            @if(input.title === 'managed_by') {
               <input matInput type="text" name="referred_by" #ref_by />
             }
             @if(input.title === 'email_address') {
@@ -87,10 +90,11 @@
             @if(isGuardAuth === 'false') {
             <div class="flex">
               <app-button [ButtonText]=" isLoadingRequest ? 'Sending Request...' : isAdminAuth === 'true' ? 'Sign In' 
-              : isAddingNewUser ? isLoadingRequest ? 'Sending Request...' 
-              : 'Create Account' : isAuthenticatingUser ? 'Log In' : 'Create Ticket'"
+              : isAddingNewUser ? 'Create Account' : isAuthenticatingUser ? 'Log In' 
+              : isAddingNewStation ? 'Add Desk' : 'Create Ticket'"
                 [ButtonEvent]="isAdminAuth === 'true' ? authenticateAdmin.bind(this) 
-                : isAddingNewUser ? addUser.bind(this) : isAuthenticatingUser ? authUser.bind(this) : createTicket.bind(this)">
+                : isAddingNewUser ? addUser.bind(this) : isAuthenticatingUser ? authUser.bind(this) 
+                : isAddingNewStation ? createDesk.bind(this) : createTicket.bind(this)">
               </app-button>
 
               @if(isAddingNewUser) {

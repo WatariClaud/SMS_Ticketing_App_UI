@@ -1,12 +1,15 @@
 export interface Ticket {
   id: number;
-  by_user: number;
+  customer_name: string;
+  phone_number: string;
+  station: string;
   start_time: Date;
   end_time: Date;
   total_waiting_time: number
   number_of_activities: number;
   served_by: number;
-  created_by: number
+  created_by: number;
+  reference_number: string;
 }
 
 export interface Activity {

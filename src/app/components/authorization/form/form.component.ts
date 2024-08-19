@@ -15,6 +15,8 @@ import { services_available } from '../../../dummy-data/services_available';
 import { SessionStorageService } from '../../../services/session/session-storage.service';
 import { roles } from '../../../models/Ticket';
 import { CreateUserService } from '../../../services/api-calls/create-user.service';
+import { CreateTicketService } from '../../../services/api-calls/create-ticket.service';
+import { GetUserService } from '../../../services/api-calls/get-user.service';
 
 @Component({
   selector: 'app-form-component',
@@ -41,13 +43,16 @@ export class FormComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private createUserService: CreateUserService,
-    private sessionStorageService: SessionStorageService
+    private getUserService: GetUserService,
+    private sessionStorageService: SessionStorageService,
+    private createTicketService: CreateTicketService
   ) {}
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
   @Input() isGuardAuth: string = 'false';
   @Input() isAdminAuth: string = 'false';
   @Input() isAddingNewUser: boolean = false;
+  @Input() isAddingNewStation: boolean = false;
   @Input() isAuthenticatingUser: boolean = false;
   @Input() selectedGuardId: string = '';
   @Input() selectedServiceId: string = '';
@@ -101,13 +106,16 @@ export class FormComponent implements OnInit, OnDestroy {
     event.preventDefault();
     let ticket: Ticket = {
       id: 0,
-      by_user: 0,
+      customer_name: '',
+      phone_number: '',
+      station: '',
       start_time: new Date(),
       end_time: new Date(),
       total_waiting_time: 0,
       number_of_activities: 0,
       served_by: 0,
-      created_by: 0
+      created_by: 0,
+      reference_number: ''
     }
     let activity: Activity = {
       id: 0,
@@ -130,7 +138,7 @@ export class FormComponent implements OnInit, OnDestroy {
     ticket = {
       ...ticket,
       id: 1,
-      by_user: users.find((user) => user.mobile_number === mobileNumber)?.id || 0,
+      customer_name: users.find((user) => user.mobile_number === mobileNumber)?.name || '',
       created_by: guards_enrolled.find((guard) => guard.id === parseInt(this.selectedGuardId, 10))?.id || 0
     };
     activity = {
@@ -142,16 +150,27 @@ export class FormComponent implements OnInit, OnDestroy {
       status: 'PENDING'
     };
 
+    this.createTicketService.create_ticket(ticket)
+    .subscribe({
+      next: (data) => {
+        console.log({data});
+      }
+    });
+
     // simulate backend POST
-    localStorage.setItem('ticket_details', JSON.stringify(ticket));
-    localStorage.setItem(`new_activity_details`, JSON.stringify(activity));
+    // localStorage.setItem('ticket_details', JSON.stringify(ticket));
+    // localStorage.setItem(`new_activity_details`, JSON.stringify(activity));
 
     // delay success for sake of toastr (notifer) - not needed, may remove
-    setTimeout(() => {
-      this.router.navigate(['/ticket_create/success']);
-    }, 500);
+    // setTimeout(() => {
+    //   this.router.navigate(['/ticket_create/success']);
+    // }, 500);
   }
-  authenticateAdmin(event: Event, argument: string): void {
+  createDesk(event: Event) {
+    event.preventDefault();
+    console.log("creating desk");
+  }
+  async authenticateAdmin(event: Event, argument: string) {
     const email_address = this.emailAddressInput.nativeElement.value;
     const password = this.passwordInput.nativeElement.value;
 
@@ -159,7 +178,28 @@ export class FormComponent implements OnInit, OnDestroy {
       return this.showNotification('Invalid credentials', 'error');
     }
     // simulate backend POST
-    this.showNotification('Authenticated, logging in', 'success')
+    const valid_user = await this.getUserService.get_user_data(email_address)  || '';
+    console.log({valid_user})
+    if(valid_user.id && valid_user.role === 'Admin') {
+      this.createUserService.loginUser({
+        email: email_address, password
+      })
+      .subscribe({
+        next: (data: any) => {
+          this.isLoadingRequest = false;
+          if(data.error_invalid_input) this.showNotification('Invalid Input', 'error');  
+          if(!data) this.showNotification('User does not exist', 'error'); 
+          if(data.jwt) {
+            this.showNotification('Authenticated, logging in', 'success')
+            // localStorage.setItem('user_token', data.jwt);
+            this.sessionStorageService.startSession(data.jwt);
+            this.router.navigate(['/hr'])
+          }
+        }
+      });
+    } else {
+      this.showNotification('Error validating request', 'error')
+    }
   }
 
   addUser(event: Event) {

@@ -1,0 +1,16 @@
+<div class="gridded">
+    <app-has-bg-image></app-has-bg-image>
+    <app-form-component
+      FormTitle="Admin Create New HelpDesk"
+      [FormInputs]="[
+      {
+        id: 'name', title: 'name'
+      },
+      {
+        id: 'managed_by', title: 'managed_by'
+      }
+      ]"
+      isGuardAuth="false"
+      [isAddingNewStation]="true"
+    ></app-form-component>
+  </div>

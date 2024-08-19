@@ -1,15 +1,19 @@
 import { Observable, from, map, catchError, of } from "rxjs";
+import { SessionStorageService } from "../../session/session-storage.service";
+import { CookieService } from 'ngx-cookie-service';
 
-export const sendRequest = (data: any, url: string, method: string): Observable<any> => {
+export const sendRequest = (data: any, url: string, method: string, token: string): Observable<any> => {
   // Determine whether to include a body based on the method
    const fetchOptions: RequestInit = {
      method,
      headers: {
-       'Content-Type': 'application/json'
+       'Content-Type': 'application/json',
+       'Authorization': `Bearer ${token}`
      }
    };
  
    if (method !== 'GET') {
+    // fetchOptions.headers.Authorization = `Bearer ${token}`;
      fetchOptions.body = JSON.stringify(data);
    }
 

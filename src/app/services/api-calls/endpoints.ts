@@ -6,6 +6,8 @@ export const AUTH_USER = `${baseUrl}/user/login/`;
 export const GEN_REFRESH_TOKEN = `${baseUrl}/user/api/token/refresh//`;
 export const GEN_ACCESS_TOKEN_FROM_REFRESH = `${baseUrl}/user/api/token/`;
 export const GET_USER = `${baseUrl}/user/user/`;
+export const GET_USERS = `${baseUrl}/user/all-users/`;
+export const CREATE_STATION = `${baseUrl}/user/new-station/`;
 
 // tickets and activities
 export const GET_REF_NUMBER = `${baseUrl}/service/create-ref_no/`;

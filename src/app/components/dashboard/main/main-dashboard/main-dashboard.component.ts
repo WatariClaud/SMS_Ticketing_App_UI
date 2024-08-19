@@ -35,13 +35,16 @@ export class MainDashboardComponent implements OnInit{
 
   ticket: Ticket = {
     id: 0,
-    by_user: 0,
+    customer_name: '',
     start_time: new Date(),
     end_time: new Date(),
     total_waiting_time: 0,
     number_of_activities: 0,
     served_by: 0,
-    created_by: 0
+    created_by: 0,
+    phone_number: '',
+    station: '',
+    reference_number: ''
   }
   activity: Activity = {
     id: 0,
@@ -66,11 +69,10 @@ export class MainDashboardComponent implements OnInit{
 
     if (this.hasValidTicket && ticket.id) {
       this.has_current = true;
-      this.customer_name = users.find((user) => user.id === ticket.by_user)?.name || '',
+      this.customer_name = users.find((user) => user.name === ticket.customer_name)?.name || '',
       this.service_name = services_available.find((service) => service.id === activity.next_station)?.title || '',
       this.started_on = formatTimestamp(ticket.start_time);
 
-      console.log({cn: this.customer_name});
       this.ticket = {
         ...ticket,
         id: ticket.id,
