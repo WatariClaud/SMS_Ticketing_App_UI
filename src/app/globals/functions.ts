@@ -1,29 +1,31 @@
 import { jwtDecode } from 'jwt-decode';
 
-// dummy use fake guards list
-import guards_enrolled from '../dummy-data/guards_enrolled';
+interface DecodedJWT {
+  iat?: number;
+  exp?: number;
+  user_id?: string;
+  token_type: string;
+}
 
 const signingKey = 'f8hA3LzT1kYv5DpX9sB2UjM7gQnW6xCe';
 
 export const signToken = (token: string) => {
   // return jwt.sign(token, signingKey);
   return true;
-}
+};
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (id: string) => {
   try {
-    // const decoded = jwtDecode(token);
-    // Convert the token to an integer
-    const tokenId = parseInt(token, 10);
+    const decoded = jwtDecode<DecodedJWT>(id);
+    console.log({ decoded });
 
-    const exists = guards_enrolled.some(guard => guard.id === tokenId);
-
-    return exists;
+    if (!decoded.user_id || decoded.token_type !== 'access') return false;
+    return true;
   } catch (error) {
     console.error('Error verifying token:', error);
-    return null;
+    return false;
   }
-}
+};
 
 export const formatTimestamp = (isoString: Date) => {
   const date = new Date(isoString);
@@ -38,7 +40,30 @@ export const formatTimestamp = (isoString: Date) => {
   return `${yy}-${mm}-${dd} at ${hh}:${min}:${ss}`;
 };
 
-export const showNotification = (message: string, type: 'success' | 'error') => {
-  return { message, type };
-}
+export const parseTimestamp = (timestamp: string): Date => {
+  // Example timestamp format: '24-08-2024 at 14:30:00'
+  const [datePart, timePart] = timestamp.split(' at ');
+  const [day, month, year] = datePart.split('-').map(Number);
+  const [hours, minutes, seconds] = timePart.split(':').map(Number);
 
+  // Create and return a new Date object
+  return new Date(year, month - 1, day, hours, minutes, seconds);
+};
+
+export const formatDifference = (
+  diff: number
+): { hours: number; minutes: number; seconds: number } => {
+  const totalSeconds = Math.abs(Math.floor(diff / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return { hours, minutes, seconds };
+};
+
+export const showNotification = (
+  message: string,
+  type: 'success' | 'error'
+) => {
+  return { message, type };
+};

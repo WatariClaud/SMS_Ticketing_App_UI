@@ -3,29 +3,53 @@
     <app-has-bg-image></app-has-bg-image>
   </div>
   <div class="col-12 col-md-6 col-lg-4">
-    <app-button ButtonText="End Session" [ButtonEvent]="endSession.bind(this)" [endSession]="true"></app-button>
-    <app-form-component [FormTitle]="is_engineer_route ? 'Generate New Engineer Ticket' : 'Generate New User Ticket'"
-      [FormInputs]="is_engineer_route ?
-      [
-        {
-        id: 'mobile_number', title: 'mobile_number'
-        },
-        {
-        id: 'service_needed', title: 'service_needed'
-        }
-      ] :
-      [
-        {
-        id: 'mobile_number', title: 'mobile_number'
-        },
-        {
-        id: 'service_needed', title: 'service_needed'
-        },
-        {
-        id: 'referred_by', title: 'referred_by'
-        }
-      ]" isGuardAuth="false" [selectedServiceId]="selectedServiceId" (serviceSelected)="onServiceSelected($event)"
-      isAdminAuth="false">
+    <app-button
+      ButtonText="End Session"
+      [ButtonEvent]="endSession.bind(this)"
+      [endSession]="true"
+    ></app-button>
+    <app-form-component
+      [FormTitle]="
+        is_engineer_route
+          ? 'Generate New Engineer Ticket'
+          : 'Generate New User Ticket'
+      "
+      [FormInputs]="
+        is_engineer_route
+          ? [
+              {
+                id: 'name',
+                title: 'name'
+              },
+              {
+                id: 'mobile_number',
+                title: 'mobile_number'
+              },
+              {
+                id: 'service_needed',
+                title: 'service_needed'
+              }
+            ]
+          : [
+              {
+                id: 'name',
+                title: 'name'
+              },
+              {
+                id: 'mobile_number',
+                title: 'mobile_number'
+              },
+              {
+                id: 'service_needed',
+                title: 'service_needed'
+              }
+            ]
+      "
+      isGuardAuth="false"
+      [selectedServiceId]="selectedServiceId"
+      (serviceSelected)="onServiceSelected($event)"
+      isAdminAuth="false"
+    >
     </app-form-component>
   </div>
 </div>

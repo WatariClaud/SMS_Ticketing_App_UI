@@ -2,31 +2,43 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SessionStorageService {
+  constructor(private cookieService: CookieService) {}
 
-  constructor(private cookieService: CookieService) { }
-
-  startSession(token: string) {
-    this.cookieService.set('jwt', token);
+  startAdminSession(token: string) {
+    this.cookieService.set('admin-jwt', token);
+  }
+  startHelpDeskSession(token: string) {
+    this.cookieService.set('hr-jwt', token);
+  }
+  authSecGuard(token: string) {
+    this.cookieService.set('guard_id', token);
   }
 
-  getToken(): string | null {
-    return this.cookieService.get('jwt');
+  getAdminToken(): string | null {
+    return this.cookieService.get('admin-jwt');
+  }
+  getHelpDeskToken(): string | null {
+    return this.cookieService.get('hr-jwt');
+  }
+  getGuardOnDuty(): string | null {
+    return localStorage.getItem('guard_id');
   }
 
-  endSession() {
-    // Clear the session storage
-    sessionStorage.clear();
+  endSession(userType: string) {
+    if (userType === 'Admin') {
+      this.cookieService.delete('admin-jwt');
+    } else if (userType === 'HelpDesk') {
+      this.cookieService.delete('hr-jwt');
+    }
 
-    // Clear the local storage
-    localStorage.clear();
+    if (userType === 'Guard') {
+      localStorage.removeItem('guard_id');
+    }
 
-    // Redirect to the login page
-
-
-    // TODO: to include logic to end the session here (e.g. log out the user)
-
+    // sessionStorage.clear(); // Not needed unless items in sessionStorage specific to userType
+    // localStorage.clear(); // Not needed unless clear all local storage items
   }
 }

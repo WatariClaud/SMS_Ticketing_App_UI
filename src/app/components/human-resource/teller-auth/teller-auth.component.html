@@ -1,7 +1,7 @@
 <div class="gridded">
   <app-has-bg-image></app-has-bg-image>
   <app-form-component
-    FormTitle="Start new security person session"
+    FormTitle="Helpdesk Sign In"
     [FormInputs]="[
       {
         id: 'email_address',
@@ -12,8 +12,8 @@
         title: 'password'
       }
     ]"
-    isGuardAuth="true"
-    [selectedGuardId]="selectedGuardId"
-    (guardSelected)="onGuardSelected($event)"
+    isGuardAuth="false"
+    isAdminAuth="false"
+    [isAuthenticatingUser]="true"
   ></app-form-component>
 </div>

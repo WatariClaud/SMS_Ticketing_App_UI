@@ -1,38 +1,83 @@
 <div class="main">
-  <app-notifier [message]="notificationMessage" [type]="notificationType"></app-notifier>
-  @if (isTeller) {
-    @if(has_current) {
-      <h3>You are currently serving customer:</h3>
-      <table>
-        <hr>
-        <div class="separator"></div>
-        <tr>{{ customer_name }}</tr>
-        <div class="separator"></div>
-        <tr>Consultation started at: {{ started_on }}</tr>
-        <tr><app-current-time [startTime]="ticket.start_time"></app-current-time></tr>
-        <br>
-        <hr>
-        <tr><button class="btn" (click)="closeSession()">Close Session</button></tr>
-      </table>
-    } @else {
-      <h3>You have no current activity, please wait:</h3>
+  <app-notifier
+    [message]="notificationMessage"
+    [type]="notificationType"
+  ></app-notifier>
+  @if (isTeller) { @if(has_current && !viewingPending) {
+  <h3>You are currently serving customer:</h3>
+  <table>
+    <br /><br />
+    <tr>
+      {{
+        customer_name
+      }}
+    </tr>
+    <br /><br />
+    <tr>
+      Consultation started at:
+      {{
+        started_on
+      }}
+    </tr>
+    <tr>
+      <app-current-time [startTime]="startedOnFormatted"></app-current-time>
+    </tr>
+    <br />
+    <tr>
+      <button class="btn" (click)="cancelSession()">Cancel Session</button>
+      <button class="btn" (click)="completeSession()" style="margin-left: 2rem">
+        Complete Session
+      </button>
+    </tr>
+  </table>
+  } @else if (viewingPending) {
+  <tr>
+    <td><b>Ticket Id</b></td>
+    <td><b>User Name</b></td>
+    <td><b>User Phone Number</b></td>
+  </tr>
+  @for (activity of activities; track activity.id) {
+  <tr>
+    <td>{{ activity.id }}</td>
+    <td>{{ activity.customer_name }}</td>
+    <td>{{ activity.phone_number }}</td>
+    <td>
+      <button (click)="update_activity_status(activity.id)">Serve User</button>
+    </td>
+  </tr>
+  } } @else {
+  <h3>
+    You have no current activity, please wait @if(next_in_line?.id) {
+    <span
+      >or
+      <button (click)="update_activity_status(next_in_line.id)">
+        Serve next user
+      </button></span
+    >
     }
-  }
+  </h3>
+  } }
 
   <!-- admin section -->
   @if (isAdmin) {
-    @if(has_current) {
-      <h3>You are currently serving customer:</h3>
-      <table>
-        <hr>
-        <div class="separator"></div>
-        <tr>{{ customer_name }}</tr>
-        <div class="separator"></div>
-        <tr>Consultation started at: {{ started_on }}</tr>
-        <tr><app-current-time [startTime]="ticket.start_time"></app-current-time></tr>
-      </table>
-    } @else {
-      <h3>You have no current activity, please wait:</h3>
+  <h3>Manage Users and Activities:</h3>
+  <br /><br />
+  <table class="table">
+    <br />
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Role</td>
+      </tr>
+    </thead>
+    @for (user of userList; track user.id) {
+    <tr>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
+    </tr>
     }
+  </table>
   }
 </div>
