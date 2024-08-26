@@ -1,10 +1,7 @@
-<app-notifier
-  [message]="notificationMessage"
-  [type]="notificationType"
-></app-notifier>
+<app-notifier [message]="notificationMessage" [type]="notificationType"></app-notifier>
 <form FormGroup="authForm">
   <div class="has-padding">
-    <mat-card>
+    <p-card>
       <mat-card-header>
         <mat-card-title>{{ FormTitle }}</mat-card-title>
       </mat-card-header>
@@ -19,13 +16,11 @@
           <mat-select (selectionChange)="onServiceChange($event)">
             <mat-option value="" disabled>Select service</mat-option>
             @if(services_available.length === 0) {
-            <mat-option value="update_later_1"
-              >No services available</mat-option
-            >
+            <mat-option value="update_later_1">No services available</mat-option>
             } @else { @for(service of services_available; track service.id) {
             <mat-option value="{{ service.id }}">{{
               service.title || service.name
-            }}</mat-option>
+              }}</mat-option>
             } }
           </mat-select>
           } @if(input.title === 'managed_by') {
@@ -37,7 +32,7 @@
             } @else { @for(manager of helpdesk_managers; track manager.id) {
             <mat-option value="{{ manager.id }}">{{
               manager.name ? manager.name : "null"
-            }}</mat-option>
+              }}</mat-option>
             } }
           </mat-select>
           } @if(input.title === 'manreferred_byaged_by') {
@@ -59,12 +54,7 @@
           </mat-select>
           } @if(input.title === 'teller_counter_name' && selectedRoleId === '1')
           {
-          <input
-            matInput
-            type="text"
-            name="teller_counter_name"
-            #teller_counter_name
-          />
+          <input matInput type="text" name="teller_counter_name" #teller_counter_name />
           } @if(input.title === 'teller_counter_name' && selectedRoleId !== '1')
           {
           <input matInput #hidden class="hidden" />
@@ -80,8 +70,7 @@
           <mat-card-actions>
             @if(isGuardAuth === 'false') {
             <div class="flex">
-              <app-button
-                [ButtonText]="
+              <app-button [ButtonText]="
                   isLoadingRequest
                     ? 'Sending Request...'
                     : isAdminAuth === 'true'
@@ -93,8 +82,7 @@
                     : isAddingNewStation
                     ? 'Add Desk'
                     : 'Create Ticket'
-                "
-                [ButtonEvent]="
+                " [ButtonEvent]="
                   isAdminAuth === 'true'
                     ? authenticateAdmin.bind(this)
                     : isAddingNewUser
@@ -104,25 +92,20 @@
                     : isAddingNewStation
                     ? createDesk.bind(this)
                     : createTicket.bind(this)
-                "
-              >
+                ">
               </app-button>
 
               @if(isAddingNewUser) {
-              <span class="spacing"></span
-              ><a href="/login-user">Already have an account?</a>
+              <span class="spacing"></span><a href="/login-user">Already have an account?</a>
               }
             </div>
             } @else if(isGuardAuth === 'true') {
-            <app-button
-              ButtonText="Authenticate"
-              [ButtonEvent]="startGuardSession.bind(this)"
-              (hasValidInput)="(has_valid_selected)"
-            ></app-button>
+            <app-button ButtonText="Authenticate" [ButtonEvent]="startGuardSession.bind(this)"
+              (hasValidInput)="(has_valid_selected)"></app-button>
             }
           </mat-card-actions>
         </div>
       </div>
-    </mat-card>
+    </p-card>
   </div>
 </form>

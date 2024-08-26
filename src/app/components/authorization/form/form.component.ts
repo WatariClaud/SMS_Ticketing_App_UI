@@ -28,6 +28,7 @@ import { CreateUserService } from '../../../services/api-calls/create-user.servi
 import { CreateTicketService } from '../../../services/api-calls/create-ticket.service';
 import { GetUserService } from '../../../services/api-calls/get-user.service';
 import { GetActivityService } from '../../../services/api-calls/get-activity.service';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-form-component',
@@ -42,6 +43,7 @@ import { GetActivityService } from '../../../services/api-calls/get-activity.ser
     ButtonComponent,
     FormsModule,
     CurrentTimeComponent,
+    CardModule
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
@@ -59,7 +61,7 @@ export class FormComponent implements OnInit, OnDestroy {
     private sessionStorageService: SessionStorageService,
     private createTicketService: CreateTicketService,
     private getActivityService: GetActivityService
-  ) {}
+  ) { }
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
   @Input() isGuardAuth: string = 'false';
