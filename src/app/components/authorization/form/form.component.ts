@@ -29,6 +29,7 @@ import { CreateTicketService } from '../../../services/api-calls/create-ticket.s
 import { GetUserService } from '../../../services/api-calls/get-user.service';
 import { GetActivityService } from '../../../services/api-calls/get-activity.service';
 import { CardModule } from 'primeng/card';
+import { ToastService } from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-form-component',
@@ -60,7 +61,8 @@ export class FormComponent implements OnInit, OnDestroy {
     private getUserService: GetUserService,
     private sessionStorageService: SessionStorageService,
     private createTicketService: CreateTicketService,
-    private getActivityService: GetActivityService
+    private getActivityService: GetActivityService,
+    private toastService: ToastService
   ) { }
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
@@ -388,9 +390,12 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   showNotification(message: string, type: 'success' | 'error') {
-    this.notificationMessage = message;
-    this.notificationType = type;
-    setTimeout(() => (this.notificationMessage = null), 3000);
+    if (type === 'success') {
+      this.toastService.showSuccess('Success', message);
+    }
+    if (type === 'error') {
+      this.toastService.showError('Error', message);
+    }
   }
 
   endSession() {

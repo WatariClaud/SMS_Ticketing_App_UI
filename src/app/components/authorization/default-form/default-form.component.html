@@ -1,20 +1,19 @@
-<div class="gridded row">
-  <div class="col-12 col-md-6 col-lg-8">
-    <app-has-bg-image></app-has-bg-image>
+<div class="grid grid-nogutter surface-section text-800" style="height: 100vh;">
+  <div class="col-12 md:col-7 p-6 text-center md:text-left flex align-items-center ">
+    <section>
+      <span class="block text-6xl font-bold mb-1">SMS Ticketing System</span>
+      <div class="text-6xl text-primary font-bold mb-3">Your Ticketing Solution</div>
+
+      <button pButton pRipple label="Home" type="button" class="p-button-outlined"></button>
+    </section>
   </div>
-  <div class="col-12 col-md-6 col-lg-4">
-    <app-button
-      ButtonText="End Session"
-      [ButtonEvent]="endSession.bind(this)"
-      [endSession]="true"
-    ></app-button>
-    <app-form-component
-      [FormTitle]="
+  <div class="col-12 md:col-5 overflow-hidden">
+    <app-button ButtonText="End Session" [ButtonEvent]="endSession.bind(this)" [endSession]="true"></app-button>
+    <app-form-component [FormTitle]="
         is_engineer_route
           ? 'Generate New Engineer Ticket'
           : 'Generate New User Ticket'
-      "
-      [FormInputs]="
+      " [FormInputs]="
         is_engineer_route
           ? [
               {
@@ -44,12 +43,8 @@
                 title: 'service_needed'
               }
             ]
-      "
-      isGuardAuth="false"
-      [selectedServiceId]="selectedServiceId"
-      (serviceSelected)="onServiceSelected($event)"
-      isAdminAuth="false"
-    >
+      " isGuardAuth="false" [selectedServiceId]="selectedServiceId" (serviceSelected)="onServiceSelected($event)"
+      isAdminAuth="false">
     </app-form-component>
   </div>
 </div>

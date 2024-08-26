@@ -4,14 +4,6 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #333742;
-}
-
-
-.gridded {
-  display: grid;
-  grid-template-columns: 65% 35%;
-  height: 100vh;
 }
 
 .has-padding {
