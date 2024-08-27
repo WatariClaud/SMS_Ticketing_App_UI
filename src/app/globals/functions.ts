@@ -41,12 +41,12 @@ export const formatTimestamp = (isoString: Date) => {
 };
 
 export const parseTimestamp = (timestamp: string): Date => {
-  // Example timestamp format: '24-08-2024 at 14:30:00'
+  // Split the input string
   const [datePart, timePart] = timestamp.split(' at ');
-  const [day, month, year] = datePart.split('-').map(Number);
+  const [year, month, day] = datePart.split('-').map(Number);
   const [hours, minutes, seconds] = timePart.split(':').map(Number);
 
-  // Create and return a new Date object
+  // Create and return a Date object
   return new Date(year, month - 1, day, hours, minutes, seconds);
 };
 

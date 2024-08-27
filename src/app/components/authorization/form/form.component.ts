@@ -14,10 +14,11 @@ import { NotifierComponent } from '../../notifier/notifier/notifier.component';
 import { CurrentTimeComponent } from '../../current_time/current-time/current-time.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule, MatChipListbox } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { ButtonComponent } from '../button/button.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl } from '@angular/forms';
 import { Activity, Ticket } from '../../../models/Ticket';
 import { users } from '../../../dummy-data/user';
 import guards_enrolled from '../../../dummy-data/guards_enrolled';
@@ -28,6 +29,7 @@ import { CreateUserService } from '../../../services/api-calls/create-user.servi
 import { CreateTicketService } from '../../../services/api-calls/create-ticket.service';
 import { GetUserService } from '../../../services/api-calls/get-user.service';
 import { GetActivityService } from '../../../services/api-calls/get-activity.service';
+import { PopupComponent } from '../../popup/popup/popup.component';
 
 @Component({
   selector: 'app-form-component',
@@ -36,12 +38,14 @@ import { GetActivityService } from '../../../services/api-calls/get-activity.ser
     RouterOutlet,
     NotifierComponent,
     MatFormFieldModule,
+    MatChipsModule,
     MatInputModule,
     MatSelectModule,
     MatCardModule,
     ButtonComponent,
     FormsModule,
     CurrentTimeComponent,
+    PopupComponent,
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
@@ -51,6 +55,9 @@ export class FormComponent implements OnInit, OnDestroy {
   sessionService: any;
   isLoadingRequest: boolean = false;
   helpdesk_managers: any[] = [];
+  services: string[] = ['Service 1', 'Service 2', 'Service 3'];
+  selectedServices: string[] = [];
+  serviceControl = new FormControl();
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -73,6 +80,7 @@ export class FormComponent implements OnInit, OnDestroy {
   selectedRole: string = '';
   selectedRoleId: string = '';
   hidden: boolean = true;
+  selectedService_id: string[] = [''];
 
   @Output() selectionSelected: EventEmitter<number> =
     new EventEmitter<number>();
@@ -92,8 +100,8 @@ export class FormComponent implements OnInit, OnDestroy {
   @ViewChild('password') passwordInput!: ElementRef<HTMLInputElement>;
   @ViewChild('user_role') roleInput!: ElementRef<HTMLSelectElement>;
   @ViewChild('managed_by') managedByInput!: ElementRef<HTMLInputElement>;
-  teller_counter_name!: ElementRef<HTMLSelectElement>;
-  teller_counter_nameInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('teller_counter_name')
+  teller_counter_nameInput!: ElementRef<HTMLSelectElement>;
 
   roles = roles;
   path: string = '';
@@ -106,6 +114,16 @@ export class FormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateTime();
+    this.createTicketService.create_ref_no(this.token).subscribe({
+      next: (data) => {
+        console.log('ticket_ref_number -> ', data);
+        localStorage.setItem('ticket_ref_number', data.ref_no);
+      },
+    });
+    this.serviceControl.valueChanges.subscribe((selectedValues) => {
+      this.selectedServices = selectedValues || [];
+    });
+    console.log(this.selectedServices);
     this.intervalId = setInterval(() => this.updateTime(), 1000);
     console.log(this.isGuardAuth);
 
@@ -117,6 +135,7 @@ export class FormComponent implements OnInit, OnDestroy {
     this.token =
       this.sessionStorageService.getHelpDeskToken() ||
       this.sessionStorageService.getAdminToken() ||
+      this.sessionStorageService.getGuardOnDuty() ||
       '';
 
     this.getUserService.getUsers(this.token).subscribe({
@@ -172,15 +191,26 @@ export class FormComponent implements OnInit, OnDestroy {
           (desk) => desk.id === parseInt(this.selectedServiceId, 10)
         )?.name || '',
       start_time: new Date(),
-      end_time: new Date(),
+      end_time: null,
       total_waiting_time: 0,
       number_of_activities: 0,
       served_by: 0,
-      created_by: 0,
+      created_by: JSON.parse(localStorage.getItem('guard_data') || '{}').email,
       reference_number: localStorage.getItem('ticket_ref_number') || '',
-      services: [this.selectedServiceId],
+      services: this.selectedServices.map((service) => {
+        return {
+          service_type: service,
+          station:
+            this.services_available.find(
+              (desk) => desk.id === parseInt(this.selectedServiceId, 10)
+            )?.name || '',
+        };
+      }),
       visit_date_time: new Date(),
-      counter_assigned: '',
+      counter_assigned:
+        this.services_available.find(
+          (desk) => desk.id === parseInt(this.selectedServiceId, 10)
+        )?.name || '',
     };
     let activity: Activity = {
       id: 0,
@@ -203,13 +233,6 @@ export class FormComponent implements OnInit, OnDestroy {
     ) {
       return this.showNotification('Invalid inputs', 'error');
     }
-    ticket = {
-      ...ticket,
-      created_by:
-        guards_enrolled.find(
-          (guard) => guard.id === parseInt(this.selectedGuardId, 10)
-        )?.id || 0,
-    };
     activity = {
       ...activity,
       id: 1,
@@ -220,6 +243,14 @@ export class FormComponent implements OnInit, OnDestroy {
         )?.id || 0,
       is_waiting: true,
       status: 'PENDING',
+    };
+
+    const payload = {
+      reference_number: ticket.reference_number,
+      customer_name: ticket.customer_name,
+      phone_number: ticket.phone_number,
+      station: ticket.station,
+      services: ticket.services,
     };
 
     this.getActivityService
@@ -238,28 +269,30 @@ export class FormComponent implements OnInit, OnDestroy {
               'success'
             );
           }
-          this.createTicketService.create_ticket(ticket, this.token).subscribe({
-            next: (data) => {
-              console.log({ ticket, token: this.token });
-              if (data) {
-                localStorage.setItem('has_valid_ticket', 'true');
-                const ticket_details_array = JSON.parse(
-                  localStorage.getItem('ticket_details') || '[]'
-                );
-                ticket_details_array.push(data);
-                localStorage.setItem(
-                  'ticket_details',
-                  JSON.stringify(ticket_details_array)
-                );
-                this.showNotification('Ticket created...', 'success');
-                setTimeout(() => {
-                  this.router.navigate(['/ticket_create/success']);
-                }, 500);
-              } else {
-                this.showNotification('An error occured', 'error');
-              }
-            },
-          });
+          this.createTicketService
+            .create_ticket(payload, this.token)
+            .subscribe({
+              next: (data) => {
+                console.log({ ticket, token: this.token });
+                if (data) {
+                  localStorage.setItem('has_valid_ticket', 'true');
+                  const ticket_details_array = JSON.parse(
+                    localStorage.getItem('ticket_details') || '[]'
+                  );
+                  ticket_details_array.push(data);
+                  localStorage.setItem(
+                    'ticket_details',
+                    JSON.stringify(ticket_details_array)
+                  );
+                  this.showNotification('Ticket created...', 'success');
+                  setTimeout(() => {
+                    this.router.navigate(['/ticket_create/success']);
+                  }, 500);
+                } else {
+                  this.showNotification('An error occured', 'error');
+                }
+              },
+            });
         },
       });
 
@@ -318,7 +351,12 @@ export class FormComponent implements OnInit, OnDestroy {
       name: this.nameInput.nativeElement.value,
       password: this.passwordInput.nativeElement.value,
       role: this.selectedRole,
+      teller_counter_name: 'null',
     };
+    if (this.selectedRole === 'Teller') {
+      payload.teller_counter_name =
+        this.teller_counter_nameInput.nativeElement.value;
+    }
     this.createUserService.createUser(payload).subscribe({
       next: (data: any) => {
         this.isLoadingRequest = false;
@@ -373,12 +411,11 @@ export class FormComponent implements OnInit, OnDestroy {
     this.selectedGuardId = event.value;
   }
   onServiceChange(event: any): void {
-    const selectedId = parseInt(event.value, 10);
-    this.serviceSelected.emit(selectedId);
-    this.has_valid_selected = true;
-    this.selectedServiceId = event.value;
+    this.selectedService_id = event.value;
+    console.log(event.value);
+    this.selectedServices = this.selectedService_id;
   }
-  onManagerChange(event: any): void {
+  onEntityChange(event: any): void {
     const selectedId = parseInt(event.value, 10);
     this.serviceSelected.emit(selectedId);
     this.has_valid_selected = true;
@@ -440,11 +477,18 @@ export class FormComponent implements OnInit, OnDestroy {
               return;
             }
             localStorage.setItem('guard_id', data.access);
+            localStorage.setItem('guard_data', JSON.stringify(valid_user));
             this.router.navigate(['/']);
           }
           this.showNotification('Authenticated, logging in', 'success');
         }
       },
     });
+  }
+  remove(service: string): void {
+    // const index = this.selectedServices.indexOf(service);
+    // if (index >= 0) {
+    //   this.selectedServices.splice(index, 1);
+    //   this.serviceControl.setValue(this.selectedServices);
   }
 }

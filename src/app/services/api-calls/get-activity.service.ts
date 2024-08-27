@@ -3,6 +3,7 @@ import { sendRequest } from './base_request/fetch';
 import {
   GET_USER_VISITATION_ACTIVITIES,
   GET_USER_VISITATION_PENDING,
+  GET_VISITATION_ACTIVITIES_PENDING,
 } from './endpoints';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class GetActivityService {
   get_pending_activities(token: string, teller_counter: string) {
     return sendRequest(
       null,
-      `${GET_USER_VISITATION_PENDING}?teller_counter=${teller_counter}`,
+      `${GET_VISITATION_ACTIVITIES_PENDING}?teller_counter=${teller_counter}`,
       'GET',
       token
     );

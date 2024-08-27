@@ -11,12 +11,12 @@
       <br /><br />
       <mat-card-content>
         @for(input of FormInputs; track input.id) {
-        <mat-form-field appearance="fill" class="input-box">
-          <mat-label>{{ input.title }}</mat-label>
-          @if(input.title) { @if(input.title === 'mobile_number') {
+        <mat-form-field appearance="outline" class="input-box">
+          <mat-label>{{ input.title }}</mat-label
+          >@if(input.title) { @if(input.title === 'mobile_number') {
           <input matInput type="tel" name="mobile_number" #mobileNumber />
-          } @if(input.title === 'service_needed') {
-          <mat-select (selectionChange)="onServiceChange($event)">
+          } @if(input.title === 'desk_assigned') {
+          <mat-select (selectionChange)="onEntityChange($event)">
             <mat-option value="" disabled>Select service</mat-option>
             @if(services_available.length === 0) {
             <mat-option value="update_later_1"
@@ -29,8 +29,7 @@
             } }
           </mat-select>
           } @if(input.title === 'managed_by') {
-          <!-- <input matInput type="text" name="managed_by" #managed_by /> -->
-          <mat-select (selectionChange)="onManagerChange($event)">
+          <mat-select (selectionChange)="onEntityChange($event)">
             <mat-option value="" disabled>Select desk manager</mat-option>
             @if(helpdesk_managers.length === 0) {
             <mat-option value="update_later_1">No users available</mat-option>
@@ -48,6 +47,22 @@
           <input matInput type="text" name="name" #name />
           } @if(input.title === 'password') {
           <input matInput type="password" name="password" #password />
+          }@if(input.title === 'service_needed') {
+          <mat-select multiple (selectionChange)="onServiceChange($event)">
+            @for (service of services; track $index) {
+            <mat-option [value]="service">
+              {{ service }}
+            </mat-option>
+            }
+          </mat-select>
+          <mat-chip-listbox #chipList>
+            <!-- @for (service of selectedServices; track $index) {
+            <mat-chip [removable]="true" (removed)="remove(service)">
+              {{ service }}
+              <mat-icon matChipRemove>x</mat-icon>
+            </mat-chip>
+            } -->
+          </mat-chip-listbox>
           } @if(isAddingNewUser === true) { @if(input.title === 'role') {
           <mat-select name="user_role" (selectionChange)="onRoleChange($event)">
             <mat-option value="" disabled>Select Role</mat-option>
@@ -57,18 +72,20 @@
             <mat-option value="{{ role.id }}">{{ role.title }}</mat-option>
             } }
           </mat-select>
-          } @if(input.title === 'teller_counter_name' && selectedRoleId === '1')
+          } @if(input.title === 'teller_counter_name' && selectedRoleId !== '1')
           {
+          <input matInput #hidden class="hidden" />
+          } } }
+        </mat-form-field>
+        } @if((selectedRole === 'Teller')) {
+        <mat-form-field appearance="outline" class="input-box">
+          <mat-label>Teller Counter</mat-label>
           <input
             matInput
             type="text"
             name="teller_counter_name"
             #teller_counter_name
           />
-          } @if(input.title === 'teller_counter_name' && selectedRoleId !== '1')
-          {
-          <input matInput #hidden class="hidden" />
-          } } }
         </mat-form-field>
         }
         <div class="input-box">

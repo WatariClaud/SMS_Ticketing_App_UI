@@ -3,81 +3,82 @@
     [message]="notificationMessage"
     [type]="notificationType"
   ></app-notifier>
-  @if (isTeller) { @if(has_current && !viewingPending) {
-  <h3>You are currently serving customer:</h3>
-  <table>
-    <br /><br />
-    <tr>
-      {{
-        customer_name
-      }}
-    </tr>
-    <br /><br />
-    <tr>
-      Consultation started at:
-      {{
-        started_on
-      }}
-    </tr>
-    <tr>
-      <app-current-time [startTime]="startedOnFormatted"></app-current-time>
-    </tr>
-    <br />
-    <tr>
-      <button class="btn" (click)="cancelSession()">Cancel Session</button>
-      <button class="btn" (click)="completeSession()" style="margin-left: 2rem">
-        Complete Session
-      </button>
-    </tr>
-  </table>
-  } @else if (viewingPending) {
-  <tr>
-    <td><b>Ticket Id</b></td>
-    <td><b>User Name</b></td>
-    <td><b>User Phone Number</b></td>
-  </tr>
-  @for (activity of activities; track activity.id) {
-  <tr>
-    <td>{{ activity.id }}</td>
-    <td>{{ activity.customer_name }}</td>
-    <td>{{ activity.phone_number }}</td>
-    <td>
-      <button (click)="update_activity_status(activity.id)">Serve User</button>
-    </td>
-  </tr>
-  } } @else {
-  <h3>
-    You have no current activity, please wait @if(next_in_line?.id) {
-    <span
-      >or
-      <button (click)="update_activity_status(next_in_line.id)">
-        Serve next user
-      </button></span
-    >
-    }
-  </h3>
-  } }
 
-  <!-- admin section -->
-  @if (isAdmin) {
-  <h3>Manage Users and Activities:</h3>
-  <br /><br />
+  @if(isLoading) {
+  <div>
+    <h4>Your data is loading, please wait. May take some time.</h4>
+  </div>
+  } @else { @if(!isLoading && isTeller) { @if(current_activity?.id &&
+  !viewingPending) {
+  <!-- Serving Customer -->
+  } }
+  <!-- Viewing Pending Activities -->
+  @if(viewingPending) { @if(has_pending) { @if(pending_activities.length === 0)
+  {
+  <p>You have no pending activities</p>
+  } @else {
   <table class="table">
-    <br />
     <thead>
       <tr>
-        <td>Name</td>
-        <td>Email</td>
-        <td>Role</td>
+        <th>Activity Id</th>
+        <th>Activity code</th>
+        <th>Action</th>
       </tr>
     </thead>
-    @for (user of userList; track user.id) {
-    <tr>
-      <td>{{ user.name }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.role }}</td>
-    </tr>
-    }
+    <tbody>
+      @for (activity of pending_activities; track $index) {
+      <tr>
+        <td>{{ activity.id }}</td>
+        <td>{{ activity.customer_visit }}</td>
+        <td>
+          @if($index === 0) {
+          <button (click)="update_activity_status(activity)">Serve User</button>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
   </table>
-  }
+  } } @else {
+  <h1>You have no pending activities</h1>
+  } } @else { @if((activities_current && activities_current ?.length === 0) ||
+  !activities_current) {
+  <h1>You have no current activity</h1>
+  } @else {
+  <h3>You are currently serving customer:</h3>
+  @for (activity of activities_current; track $index) {
+  <p>Activity ID: #{{ activity.id }}</p>
+  <p>Activity Code: {{ activity.customer_visit }}</p>
+  <p>Consultation started at: {{ activity.created_on }}</p>
+  <app-current-time [startTime]="activity.original_date"></app-current-time>
+  <button (click)="cancelSession(activity)">Cancel</button>
+  <button (click)="completeSession(activity)" style="margin-left: 2rem">
+    Complete
+  </button>
+  } } } }
+  <!-- <div *ngIf="!isLoading && isTeller"> -->
+  <!-- No Current Activity -->
+  <!-- <div *ngIf="!current_activity?.id && !viewingPending"></div> -->
+  <!-- </div> -->
+
+  <!-- Admin Section -->
+  <!-- <div *ngIf="isAdmin">
+    <h3>Manage Users and Activities:</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of userList">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
 </div>

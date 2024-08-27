@@ -3,9 +3,9 @@ export interface Ticket {
   customer_name: string;
   phone_number: string;
   station: string;
-  services: string[];
+  services: any[];
   start_time: Date;
-  end_time: Date;
+  end_time: Date | null;
   total_waiting_time: number;
   number_of_activities: number;
   served_by: number;

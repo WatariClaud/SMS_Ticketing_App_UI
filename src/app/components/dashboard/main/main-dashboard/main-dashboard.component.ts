@@ -15,6 +15,8 @@ import { SessionStorageService } from '../../../../services/session/session-stor
 import { Subscription } from 'rxjs';
 import { GetActivityService } from '../../../../services/api-calls/get-activity.service';
 import { CreateTicketService } from '../../../../services/api-calls/create-ticket.service';
+import { CreateActivityService } from '../../../../services/api-calls/create-activity.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -24,17 +26,26 @@ import { CreateTicketService } from '../../../../services/api-calls/create-ticke
   styleUrl: './main-dashboard.component.css',
 })
 export class MainDashboardComponent implements OnInit {
+  current_activity: any;
+  ref_no: any;
+  activities_current: any;
+  pending_activities: any;
+  in_progress_activities: any;
+  counter: any;
   constructor(
     private getUserService: GetUserService,
     private getActivityService: GetActivityService,
     private sessionStorageService: SessionStorageService,
     private createTicketService: CreateTicketService,
-    private state: GetState
+    private createActivityService: CreateActivityService,
+    private state: GetState,
+    private router: Router
   ) {}
   private routeSubscription: Subscription = new Subscription();
   @Input() isTeller: boolean = false;
   @Input() isAdmin: boolean = false;
   @Input() viewingPending: boolean = false;
+  isLoading: boolean = true;
 
   notificationMessage: string | null = null;
   notificationType: string = 'error';
@@ -48,33 +59,8 @@ export class MainDashboardComponent implements OnInit {
 
   activities: any[] = [];
 
-  ticket: Ticket = {
-    id: 0,
-    customer_name: '',
-    start_time: new Date(),
-    end_time: new Date(),
-    total_waiting_time: 0,
-    number_of_activities: 0,
-    served_by: 0,
-    created_by: 0,
-    phone_number: '',
-    station: '',
-    reference_number: '',
-    services: [],
-    visit_date_time: new Date(),
-    counter_assigned: '',
-  };
-  activity: Activity = {
-    id: 0,
-    by_ticket: 0,
-    next_station: 0,
-    is_waiting: false,
-    completed: false,
-    cancelled: false,
-    status: '',
-    created_on: new Date(),
-    closed_on: new Date(),
-  };
+  ticket: any;
+  activity: any;
 
   customer_name: string = '';
   service_name: string = '';
@@ -85,78 +71,106 @@ export class MainDashboardComponent implements OnInit {
   token: string = '';
   authenticatedTeller: any;
   startedOnFormatted!: Date;
+  desks: any[] = [];
+  has_pending: boolean = false;
 
   ngOnInit(): void {
     this.token =
       this.sessionStorageService.getHelpDeskToken() ||
       this.sessionStorageService.getAdminToken() ||
       '';
+    this.current_activity = JSON.parse(
+      localStorage.getItem('current_activity') || '{}'
+    );
     const ticket: Ticket = JSON.parse(this.ticket_details)[0];
     const activity: Activity = JSON.parse(this.ticket_activity_details)[0];
+
     if (this.isAdmin) {
       this.getUserService
         .getUsers(this.sessionStorageService.getAdminToken())
         .subscribe({
           next: (data: any) => {
-            console.log({ data });
             this.userList = data;
+          },
+          error: (err: any) => {
+            console.error('An error occurred:', err);
           },
         });
     } else {
       this.getUserService.getUser(this.token).subscribe({
         next: (data: any) => {
+          if (!data) window.location.replace('/login-user');
           if (data) {
             this.authenticatedTeller = data;
             this.createTicketService.get_desks(this.token).subscribe({
               next: (data) => {
                 if (data && data.length > 0) {
-                  data.filter((item: { managed_by: any }) => {
+                  this.desks = data.filter((item: { managed_by: any }) => {
                     return item.managed_by === this.authenticatedTeller.id
-                      ? (this.activities = [...this.activities, item])
+                      ? item
                       : null;
                   });
+                  const has_pending_activities = this.desks.filter((item) => {
+                    return item.is_open === true &&
+                      item.managed_by === this.authenticatedTeller.id
+                      ? item
+                      : [];
+                  });
+                  console.log({ desks: has_pending_activities });
+                  this.counter = has_pending_activities[0].name;
+                  if (has_pending_activities.length > 0) {
+                    this.getActivityService
+                      .get_pending_activities(
+                        this.sessionStorageService.getHelpDeskToken() || '',
+                        has_pending_activities[0].name || ''
+                      )
+                      .subscribe({
+                        next: (data: any) => {
+                          console.clear();
+                          console.log(data);
+                          this.isLoading = false;
+                          if (!data || data.length === 0) {
+                            this.has_current = false;
+                          } else {
+                            this.pending_activities = data.filter(
+                              (item: { status: string }) => {
+                                return item.status === 'pending';
+                              }
+                            );
+                            this.activities_current = data.filter(
+                              (item: { status: string }) => {
+                                return item.status === 'in_progress';
+                              }
+                            );
+                            if (!this.viewingPending) {
+                              this.activities_current.forEach((item: any) => {
+                                item.original_date = item.created_on;
+                                item.created_on = formatTimestamp(
+                                  item.created_on
+                                );
+                              });
+                            }
+                            if (this.pending_activities.length > 0) {
+                              this.has_pending = true;
+                            }
+                          }
+                        },
+                      });
+                  } else {
+                    this.has_current = false;
+                  }
                 }
+                return this.desks;
               },
             });
           }
         },
       });
-
-      this.getActivityService
-        .get_pending_activities(
-          this.sessionStorageService.getHelpDeskToken() || '',
-          ticket?.counter_assigned || ''
-        )
-        .subscribe({
-          next: (data: any) => {
-            if (!data || data.length === 0) {
-              this.has_current = false;
-            } else {
-              let index = 0;
-              for (const item of data) {
-                console.log({ item });
-                if (item.status === 'in_progress') {
-                  this.has_current = true;
-                  this.customer_name = data[0].customer_name;
-                  this.started_on = formatTimestamp(data[0].visit_date_time);
-                  this.startedOnFormatted = new Date(data[0].visit_date_time);
-                } else if (item.status === 'pending') {
-                  this.next_in_line = data[0];
-                  if (index === 1) break;
-                  console.log('nil', this.next_in_line);
-                }
-                index++;
-              }
-
-              this.activities = data;
-              console.log('activity: ', { data });
-            }
-          },
-        });
     }
   }
-  get_diff(type: 'complete' | 'cancel') {
-    const diff = this.startedOnFormatted.getTime() - new Date().getTime(); // Difference in milliseconds
+
+  get_diff(type: 'complete' | 'cancel', date: Date) {
+    const diff = date.getTime() - new Date().getTime(); // Difference in milliseconds
     const { hours, minutes, seconds } = formatDifference(diff);
     const notificationMessage =
       type === 'complete'
@@ -165,32 +179,31 @@ export class MainDashboardComponent implements OnInit {
 
     return this.showNotification(notificationMessage, 'success');
   }
-  completeSession() {
-    const activity: any = this.activities[0];
+  completeSession(activity: any) {
+    const id: any = activity.id;
     console.log({ activity });
 
-    this.get_diff('complete');
-    this.createTicketService
-      .complete_activity(this.token, activity.id)
-      .subscribe({
-        next: (data) => {
-          console.clear();
-          console.log({ data });
-        },
-      });
+    this.get_diff('complete', parseTimestamp(activity.created_on));
+    this.createTicketService.complete_activity(this.token, id).subscribe({
+      next: (data) => {
+        console.log({ data });
+        if (data) {
+          this.has_current = false;
+          this.router.navigate(['/hr/activity/pending']);
+        }
+      },
+    });
   }
-  cancelSession() {
-    const activity: any = this.activities[0];
+  cancelSession(activity: any) {
+    const id = activity.id;
     console.log({ activity });
-    this.get_diff('cancel');
-    this.createTicketService
-      .cancel_activity(this.token, activity.id)
-      .subscribe({
-        next: (data) => {
-          console.clear();
-          console.log({ data });
-        },
-      });
+    this.get_diff('cancel', parseTimestamp(activity.created_on));
+    this.createTicketService.cancel_activity(this.token, id).subscribe({
+      next: (data) => {
+        // console.clear();
+        console.log({ data });
+      },
+    });
   }
 
   showNotification(message: string, type: 'success' | 'error') {
@@ -199,7 +212,19 @@ export class MainDashboardComponent implements OnInit {
     setTimeout(() => (this.notificationMessage = null), 3000);
   }
 
-  update_activity_status(visit_id: string) {
-    this.showNotification('Starting serve for ' + visit_id, 'success');
+  update_activity_status(activity: any) {
+    this.showNotification('Starting serve for ' + activity.id, 'success');
+    console.log({ activity });
+    this.createActivityService
+      .update_activity_status(activity.id, this.token)
+      .subscribe({
+        next: (data) => {
+          // console.clear();
+          console.log('act status updated to -> ', data);
+          localStorage.setItem('current_activity', JSON.stringify([data]));
+          this.activities.splice(0, 1);
+          this.router.navigate(['/hr']);
+        },
+      });
   }
 }
