@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormComponent } from '../../authorization/form/form.component';
-import { LeftSidebarComponent } from '../../dashboard/left-sidebar/left-sidebar/left-sidebar.component';
+import { LeftSidebarComponent } from '../../shared/left-sidebar/left-sidebar.component';
 import { MainDashboardComponent } from '../../dashboard/main/main-dashboard/main-dashboard.component';
 import { SessionStorageService } from '../../../services/session/session-storage.service';
 import { verifyToken } from '../../../globals/functions';
@@ -18,7 +18,7 @@ export class TellerComponent implements OnInit {
   constructor(
     private router: Router,
     private sessionStorageService: SessionStorageService
-  ) {}
+  ) { }
   ngOnInit(): void {
     const hrId = this.sessionStorageService.getHelpDeskToken() || '';
     const isValidToken = verifyToken(hrId);

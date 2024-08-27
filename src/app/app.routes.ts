@@ -11,6 +11,8 @@ import { UserComponent } from './components/authorization/user/user/user.compone
 import { StationManagementComponent } from './components/authorization/admin/station-management/station-management/station-management.component';
 import { AdminWrapperComponent } from './components/authorization/admin/admin-wrapper/admin-wrapper.component';
 import { LogoutComponent } from './components/authorization/logout/logout/logout.component';
+import { StationsComponent } from './pages/admin/stations/stations.component';
+import { LayoutComponent } from './components/shared/layout/layout.component';
 
 export const routes: Routes = [
   { path: '', component: DefaultFormComponent, canActivate: [AuthGuard] },
@@ -19,7 +21,14 @@ export const routes: Routes = [
     component: DefaultFormComponent,
     canActivate: [AuthGuard],
   },
-  { path: 'admin', component: AdminWrapperComponent },
+  {
+    path: 'admin',
+    component: LayoutComponent,
+    children: [
+      { path: '', component: AdminWrapperComponent },
+      { path: 'stations', component: StationsComponent },
+    ]
+  },
   {
     path: 'admin/add-helpdesk',
     component: StationManagementComponent,

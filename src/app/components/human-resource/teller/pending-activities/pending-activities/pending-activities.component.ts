@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LeftSidebarComponent } from '../../../../dashboard/left-sidebar/left-sidebar/left-sidebar.component';
+import { LeftSidebarComponent } from '../../../../shared/left-sidebar/left-sidebar.component';
 import { MainDashboardComponent } from '../../../../dashboard/main/main-dashboard/main-dashboard.component';
 
 @Component({
@@ -9,4 +9,4 @@ import { MainDashboardComponent } from '../../../../dashboard/main/main-dashboar
   templateUrl: './pending-activities.component.html',
   styleUrl: './pending-activities.component.css',
 })
-export class PendingActivitiesComponent {}
+export class PendingActivitiesComponent { }

@@ -11,11 +11,7 @@
       <hr />
       }
       <li>
-        <a
-          [routerLink]="item.router_link"
-          (click)="setActive(item)"
-          [ngClass]="{ active: item.active }"
-        >
+        <a [routerLink]="item.router_link" (click)="setActive(item)" [ngClass]="{ active: item.active }">
           <i [class]="item.icon"></i>
           <span class="menu-text">{{ item.title }}</span>
         </a>

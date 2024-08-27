@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { GetState } from '../../../../services/get-state';
 import { Subscription } from 'rxjs';
+import { GetState } from '../../../services/get-state';
 
 @Component({
   selector: 'app-left-sidebar',
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./left-sidebar.component.css'],
 })
 export class LeftSidebarComponent implements OnInit {
-  constructor(private state: GetState) {}
+  constructor(private state: GetState) { }
   private routeSubscription: Subscription = new Subscription();
   menu_items: any[] = [];
 
@@ -37,9 +37,21 @@ export class LeftSidebarComponent implements OnInit {
           active: false,
         },
         {
+          title: "Pending Visits",
+          router_link: '/hr/activity/pending',
+          icon: 'pi pi-user-minus',
+          active: false,
+        },
+        {
           title: 'Add New Helpdesk',
           router_link: '/admin/add-helpdesk',
           icon: 'fas fa-calendar-day',
+          active: false,
+        },
+        {
+          title: 'Stations',
+          router_link: '/admin/stations',
+          icon: 'pi pi-home',
           active: false,
         },
         {
