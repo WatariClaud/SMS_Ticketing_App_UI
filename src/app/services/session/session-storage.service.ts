@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class SessionStorageService {
-  constructor(private cookieService: CookieService) {}
+  constructor(private cookieService: CookieService) { }
 
   startAdminSession(token: string) {
     this.cookieService.set('admin-jwt', token);
@@ -40,5 +40,10 @@ export class SessionStorageService {
 
     // sessionStorage.clear(); // Not needed unless items in sessionStorage specific to userType
     // localStorage.clear(); // Not needed unless clear all local storage items
+  }
+
+  clearAllSessions() {
+    this.cookieService.deleteAll();
+    localStorage.clear();
   }
 }
