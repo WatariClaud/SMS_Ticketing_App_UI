@@ -5,11 +5,17 @@ import { FormComponent } from '../form/form.component';
 import { ButtonComponent } from '../button/button.component';
 import { CreateTicketService } from '../../../services/api-calls/create-ticket.service';
 import { SessionStorageService } from '../../../services/session/session-storage.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-default-form',
   standalone: true,
-  imports: [HasBgImageComponent, FormComponent, ButtonComponent],
+  imports: [
+    HasBgImageComponent,
+    FormComponent,
+    ButtonComponent,
+    ButtonModule
+  ],
   templateUrl: './default-form.component.html',
   styleUrl: './default-form.component.css',
 })
@@ -29,7 +35,7 @@ export class DefaultFormComponent implements OnInit {
   onServiceSelected(serviceId: number): void {
     this.selectedServiceId = serviceId.toString();
   }
-  endSession() {}
+  endSession() { }
 
   ngOnInit(): void {
     this.createTicketService

@@ -29,7 +29,8 @@ import { CreateUserService } from '../../../services/api-calls/create-user.servi
 import { CreateTicketService } from '../../../services/api-calls/create-ticket.service';
 import { GetUserService } from '../../../services/api-calls/get-user.service';
 import { GetActivityService } from '../../../services/api-calls/get-activity.service';
-import { PopupComponent } from '../../popup/popup/popup.component';
+import { CardModule } from 'primeng/card';
+import { ToastService } from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-form-component',
@@ -45,7 +46,7 @@ import { PopupComponent } from '../../popup/popup/popup.component';
     ButtonComponent,
     FormsModule,
     CurrentTimeComponent,
-    PopupComponent,
+    CardModule,
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
@@ -65,7 +66,8 @@ export class FormComponent implements OnInit, OnDestroy {
     private getUserService: GetUserService,
     private sessionStorageService: SessionStorageService,
     private createTicketService: CreateTicketService,
-    private getActivityService: GetActivityService
+    private getActivityService: GetActivityService,
+    private toastService: ToastService
   ) {}
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
@@ -423,9 +425,12 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   showNotification(message: string, type: 'success' | 'error') {
-    this.notificationMessage = message;
-    this.notificationType = type;
-    setTimeout(() => (this.notificationMessage = null), 3000);
+    if (type === 'success') {
+      this.toastService.showSuccess('Success', message);
+    }
+    if (type === 'error') {
+      this.toastService.showError('Error', message);
+    }
   }
 
   endSession() {

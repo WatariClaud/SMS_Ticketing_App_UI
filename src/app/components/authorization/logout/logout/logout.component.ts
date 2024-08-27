@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { SessionStorageService } from '../../../../services/session/session-storage.service';
+import { ToastService } from '../../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-logout',
@@ -13,8 +14,9 @@ import { SessionStorageService } from '../../../../services/session/session-stor
 export class LogoutComponent implements OnInit {
   constructor(
     private sessionStorageService: SessionStorageService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private toastService: ToastService
+  ) { }
   userType: string | null = null;
 
   ngOnInit(): void {

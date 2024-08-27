@@ -1,19 +1,24 @@
-<div class="gridded">
-  <app-has-bg-image></app-has-bg-image>
-  <app-form-component
-    FormTitle="Start new security person session"
-    [FormInputs]="[
-      {
-        id: 'email_address',
-        title: 'email_address'
-      },
-      {
-        id: 'password',
-        title: 'password'
-      }
-    ]"
-    isGuardAuth="true"
-    [selectedGuardId]="selectedGuardId"
-    (guardSelected)="onGuardSelected($event)"
-  ></app-form-component>
+<div class="grid grid-nogutter surface-section text-800" style="height: 100vh;">
+  <div class="col-12 md:col-8 p-6 text-center md:text-left flex align-items-center ">
+    <section>
+      <span class="block text-6xl font-bold mb-1">SMS Ticketing</span>
+      <div class="text-6xl text-primary font-bold mb-3">Your Ticketing Solution</div>
+      <p class="mt-0 mb-4 text-700 line-height-3">A simple and easy to use ticketing system, track your tickets and get
+        notified when your ticket is resolved.</p>
+      <button pButton pRipple label="Get Started" type="button" class="mr-3 p-button-raised"></button>
+    </section>
+  </div>
+  <div class="col-12 md:col-4 overflow-hidden">
+    <app-form-component FormTitle="Start new security person session" [FormInputs]="[
+    {
+      id: 'email_address',
+      title: 'email_address'
+    },
+    {
+      id: 'password',
+      title: 'password'
+    }
+  ]" isGuardAuth="true" [selectedGuardId]="selectedGuardId"
+      (guardSelected)="onGuardSelected($event)"></app-form-component>
+  </div>
 </div>

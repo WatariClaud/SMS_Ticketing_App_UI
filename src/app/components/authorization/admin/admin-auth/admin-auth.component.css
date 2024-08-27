@@ -1,5 +1,23 @@
-.gridded {
-    display: grid;
-    grid-template-columns: 65% 35%;
-    height: 100vh;
-  }
+.grid {
+  background: linear-gradient(135deg, #F5F2EB, #38383a);
+}
+
+.surface-section {
+  background-color: transparent;
+}
+
+.text-primary {
+  color: #04454D;
+}
+
+.p-button-raised {
+  background-color: #FDC827;
+  border-color: #FDC827;
+  color: #04454D;
+}
+
+.p-button-raised:hover {
+  background-color: #04BA71;
+  border-color: #04BA71;
+  color: #F5F2EB;
+}
