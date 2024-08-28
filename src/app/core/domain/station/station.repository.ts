@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Station } from "./station";
-import { API_ENDPOINTS } from "../constants/api.constants";
+import { API_ENDPOINTS } from "../../constants/api.constants";
 
 @Injectable({
   providedIn: 'root'

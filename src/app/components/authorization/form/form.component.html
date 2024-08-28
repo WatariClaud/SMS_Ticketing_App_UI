@@ -116,11 +116,11 @@
               }
             </div>
             } @else if(isGuardAuth === 'true') {
-            <div class="">
+            <div class="grid gap-2">
               <app-button ButtonText="Authenticate" [ButtonEvent]="startGuardSession.bind(this)"
                 (hasValidInput)="(has_valid_selected)"></app-button>
 
-              <div class="flex" style="margin-top: 10px;">
+              <div class="">
                 <p-menu [model]="changeUserTypes" #menu [popup]="true" />
                 <p-button label="Change User Type" icon="pi pi-angle-down" class="p-button-raised p-button-text"
                   (click)="menu.toggle($event)" iconPos="right" onkeydown="menu.toggle($event)"></p-button>

@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private sessionStorageService: SessionStorageService
-  ) {}
+  ) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -24,8 +24,6 @@ export class AuthGuard implements CanActivate {
     const guardId = this.sessionStorageService.getGuardOnDuty() || '';
     const isValidToken = verifyToken(guardId);
     const isAuthRoute = state.url === '/security/authenticate';
-
-    console.log({ isValidToken, isAuthRoute });
     if (!isValidToken) {
       if (!isAuthRoute) {
         this.router.navigate(['/security/authenticate']);

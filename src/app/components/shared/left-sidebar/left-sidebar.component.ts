@@ -55,6 +55,12 @@ export class LeftSidebarComponent implements OnInit {
           active: false,
         },
         {
+          title: 'Reports',
+          router_link: '/admin/reports',
+          icon: 'pi pi-home',
+          active: false,
+        },
+        {
           title: 'Logout',
           router_link: '/admin/logout',
           icon: 'fas fa-sign-out-alt',
