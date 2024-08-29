@@ -17,6 +17,7 @@ import { GetActivityService } from '../../../../services/api-calls/get-activity.
 import { CreateTicketService } from '../../../../services/api-calls/create-ticket.service';
 import { CreateActivityService } from '../../../../services/api-calls/create-activity.service';
 import { Router } from '@angular/router';
+import { TimeService } from '../../../../services/session/time-tracking.service';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -32,12 +33,14 @@ export class MainDashboardComponent implements OnInit {
   pending_activities: any;
   in_progress_activities: any;
   counter: any;
+  timeDifference: any;
   constructor(
     private getUserService: GetUserService,
     private getActivityService: GetActivityService,
     private sessionStorageService: SessionStorageService,
     private createTicketService: CreateTicketService,
     private createActivityService: CreateActivityService,
+    private timeService: TimeService,
     private state: GetState,
     private router: Router
   ) {}
@@ -46,6 +49,7 @@ export class MainDashboardComponent implements OnInit {
   @Input() isAdmin: boolean = false;
   @Input() viewingPending: boolean = false;
   isLoading: boolean = true;
+  private subscription: Subscription | null = null;
 
   notificationMessage: string | null = null;
   notificationType: string = 'error';
@@ -170,16 +174,24 @@ export class MainDashboardComponent implements OnInit {
     }
   }
 
-  get_diff(type: 'complete' | 'cancel', date: Date) {
-    const diff = date.getTime() - new Date().getTime(); // Difference in milliseconds
-    const { hours, minutes, seconds } = formatDifference(diff);
-    const notificationMessage =
-      type === 'complete'
-        ? `Completed session, Spent ${hours} hours, ${minutes} minutes and ${seconds} seconds`
-        : `Cancelled session, Spent ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+  get_diff(type: 'complete' | 'cancel', started: Date) {
+    this.subscription = this.timeService.timeDifference$.subscribe(
+      (timeDiff: string) => {
+        const regex = /(\d+) days, (\d+) hours, (\d+) minutes, (\d+) seconds/;
+        const match = timeDiff.match(regex);
+        if (match) {
+          const [_, days, hours, minutes, seconds] = match.map(Number);
+          const notificationMessage =
+            type === 'complete'
+              ? `Completed session, Spent ${days} days,  ${hours} hours, ${minutes} minutes and ${seconds} seconds`
+              : `Cancelled session, Spent ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
 
-    return this.showNotification(notificationMessage, 'success');
+          this.showNotification(notificationMessage, 'success');
+        }
+      }
+    );
   }
+
   completeSession(activity: any) {
     const id: any = activity.id;
     console.log({ activity });
