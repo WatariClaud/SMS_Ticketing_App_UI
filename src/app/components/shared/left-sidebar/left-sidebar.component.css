@@ -57,6 +57,13 @@
   border-radius: 4px;
   transition: background-color 0.3s, color 0.3s;
 }
+
+.menu a:hover {
+  background-color: #171B26;
+  color: #fff;
+  /* make pointer cursor */
+  cursor: pointer;
+}
 .menu i {
   font-size: 18px;
   margin-right: 15px;
@@ -67,4 +74,22 @@
 .menu a:hover, .menu a.active {
   background-color: #171B26;
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px;
+  }
+  .sidebar.minimized {
+    width: 80px;
+  }
+  .menu a {
+    padding: 10px 15px;
+  }
+  .menu i {
+    margin-right: 0;
+  }
+  .menu-text {
+    display: none;
+  }
 }

@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToastService } from '../../services/toast/toast.service';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,8 @@ import { ToastService } from '../../services/toast/toast.service';
     ButtonModule,
     FormsModule,
     PasswordModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -50,5 +52,9 @@ export class LoginComponent {
         this.toastService.showError('Error', 'Login failed');
       }
     });
+  }
+
+  navigateToRegister() {
+    // navigate to register page
   }
 }

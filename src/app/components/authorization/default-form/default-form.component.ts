@@ -38,7 +38,7 @@ export class DefaultFormComponent implements OnInit {
   endSession(): void {
     this.sessionStorageService.clearAllSessions();
     // refresh page
-    this.router.navigate(['/security/authenticate']);
+    this.router.navigate(['/login']);
   }
 
   ngOnInit(): void {

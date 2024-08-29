@@ -8,6 +8,7 @@ import { API_ENDPOINTS } from '../../core/constants/api.constants';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LOCAL_STORAGE, LOCAL_STORAGE_KEYS } from '../../core/constants/storage.constant';
 import { SessionStorageService } from '../session/session-storage.service';
+import { RoleLower } from '../../core/domain/user/user';
 
 @Injectable({
   providedIn: 'root'
@@ -40,15 +41,19 @@ export class AuthService {
         // get user details
         this.getUserDetails().subscribe({
           next: (user) => {
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem(
+              LOCAL_STORAGE_KEYS.user,
+              JSON.stringify(user)
+            );
             const userRole = String(user.role).toLocaleLowerCase();
-            if (userRole === 'admin') {
+
+            if (userRole === RoleLower.ADMIN) {
               this.sessionService.startAdminSession(response.access);
               this.router.navigate(['/admin']);
-            } else if (userRole === 'teller') {
+            } else if (userRole === RoleLower.TELLER) {
               this.sessionService.startHelpDeskSession(response.access);
               this.router.navigate(['/hr']);
-            } else if (userRole === 'guard') {
+            } else if (userRole === RoleLower.SECURITY) {
               this.sessionService.authSecGuard(response.access);
               this.router.navigate(['/']);
             }
@@ -89,6 +94,8 @@ export class AuthService {
   logoutUser(): void {
     localStorage.removeItem(LOCAL_STORAGE.user);
     localStorage.removeItem(LOCAL_STORAGE.user_token);
+    localStorage.removeItem(LOCAL_STORAGE.refresh_token);
+    this.sessionService.clearAllSessions();
     this.router.navigate(['/login']);
   }
 }

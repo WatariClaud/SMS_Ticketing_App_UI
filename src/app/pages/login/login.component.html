@@ -1,10 +1,12 @@
 <div class="flex align-items-center justify-content-center h-full">
   <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6 xl:w-4 md:w-5 sm:w-6 xs:w-7">
     <div class="text-center mb-5">
-      <img src="assets/images/blocks/logos/hyper.svg" alt="Image" height="50" class="mb-3">
+      <img
+        src="https://w7.pngwing.com/pngs/739/108/png-transparent-iphone-sms-computer-icons-text-messaging-sms-electronics-search-engine-optimization-text-thumbnail.png"
+        alt="Image" height="50" class="mb-3">
       <div class="text-900 text-3xl font-medium mb-3">SMS Ticketing System</div>
       <span class="text-600 font-medium line-height-3">Don't have an account?</span>
-      <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
+      <a routerLink="/create-user" class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
     </div>
 
     <form [formGroup]="loginForm" class="mb-5">

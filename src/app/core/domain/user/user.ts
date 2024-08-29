@@ -4,6 +4,12 @@ export enum Role {
   SECURITY = 'Security',
 }
 
+export enum RoleLower {
+  ADMIN = 'admin',
+  TELLER = 'teller',
+  SECURITY = 'security',
+}
+
 export interface User {
   id: number;
   email: string;

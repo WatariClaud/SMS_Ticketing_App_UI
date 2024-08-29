@@ -19,8 +19,11 @@ import { guestGuard } from './core/guards/guest/guest.guard';
 import { authGuard } from './core/guards/auth/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: DefaultFormComponent, canActivate: [AuthGuard] },
+  { path: '', component: DefaultFormComponent, canActivate: [authGuard] },
+
   { path: 'login', canActivate: [guestGuard], component: LoginComponent },
+  { path: 'login-user', canActivate: [guestGuard], component: LoginComponent },
+  { path: 'create-user', component: UserComponent },
   {
     path: 'engineer',
     component: DefaultFormComponent,
@@ -29,6 +32,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', component: AdminWrapperComponent },
       { path: 'view-visits', component: ReportsComponent },
@@ -42,21 +46,20 @@ export const routes: Routes = [
   },
   {
     path: 'hr',
+    component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', component: TellerComponent },
-      { path: 'login', component: TellerAuthComponent },
       { path: 'activity/current', component: TellerComponent },
       { path: 'activity/pending', component: PendingActivitiesComponent },
       { path: 'logout', component: LogoutComponent },
     ],
   },
 
-  { path: 'create-user', component: UserComponent },
-  { path: 'login-user', component: UserComponent },
   {
     path: 'security/authenticate',
     component: SecurityGuardAuthorizationComponent,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
   },
   { path: 'ticket_create/success', component: TicketActionsComponent },
   { path: 'ticket_create/error', component: TicketActionsComponent },
