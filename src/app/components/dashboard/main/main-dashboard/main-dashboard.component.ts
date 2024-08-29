@@ -91,6 +91,7 @@ export class MainDashboardComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.userList = data;
+            this.isLoading = false;
           },
           error: (err: any) => {
             console.error('An error occurred:', err);

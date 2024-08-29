@@ -27,14 +27,14 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: '', component: AdminWrapperComponent },
+      { path: 'view-visits', component: ReportsComponent },
       { path: 'stations', component: StationsComponent },
-      { path: 'reports', component: ReportsComponent },
       {
         path: 'add-helpdesk',
         component: StationManagementComponent,
         canActivate: [AuthGuard],
       },
-    ]
+    ],
   },
   {
     path: 'hr',
@@ -44,7 +44,7 @@ export const routes: Routes = [
       { path: 'activity/current', component: TellerComponent },
       { path: 'activity/pending', component: PendingActivitiesComponent },
       { path: 'logout', component: LogoutComponent },
-    ]
+    ],
   },
 
   { path: 'create-user', component: UserComponent },

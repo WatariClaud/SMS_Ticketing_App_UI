@@ -40,7 +40,6 @@ export class CreateTicketService {
     return sendRequest({ activity_id }, CANCEL_ACTIVITY, 'POST', token);
   }
   complete_activity(token: string, activity_id: number) {
-    console.log({ token });
     return sendRequest({ activity_id }, COMPLETE_ACTIVITY, 'POST', token);
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sendRequest } from './base_request/fetch';
 import {
+  GET_ALL_VISIT_DETAILS,
   GET_USER_VISITATION_ACTIVITIES,
   GET_USER_VISITATION_PENDING,
   GET_VISITATION_ACTIVITIES_PENDING,
@@ -20,12 +21,15 @@ export class GetActivityService {
     );
   }
   get_activities(data: any, token: string) {
-    console.log('get_activities: ', { data });
     return sendRequest(
       null,
       GET_USER_VISITATION_ACTIVITIES + '?reference_number=' + data,
       'GET',
       token
     );
+  }
+
+  get_all_visists(token: string) {
+    return sendRequest(null, GET_ALL_VISIT_DETAILS, 'GET', token);
   }
 }

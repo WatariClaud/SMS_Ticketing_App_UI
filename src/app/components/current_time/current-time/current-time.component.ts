@@ -1,4 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { TimeService } from '../../../services/session/time-tracking.service';
+import { formatTimestamp, parseTimestamp } from '../../../globals/functions';
 
 @Component({
   selector: 'app-current-time',
@@ -7,7 +9,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
   templateUrl: './current-time.component.html',
   styleUrls: ['./current-time.component.css'],
 })
-export class CurrentTimeComponent implements OnInit, OnDestroy {
+export class CurrentTimeComponent implements OnInit {
+  constructor(private timeService: TimeService) {}
   @Input() startTime?: Date | string;
   currentTime: string = '';
   timeDifference: string = '';
@@ -33,32 +36,17 @@ export class CurrentTimeComponent implements OnInit, OnDestroy {
     this.intervalId = setInterval(() => this.updateTime(), 1000);
   }
 
-  private updateTime(): void {
+  updateTime(): void {
     const now = new Date();
     this.currentTime = now.toLocaleTimeString();
 
     if (this.predefinedTime) {
-      this.calculateTimeDifference(now);
-    }
-  }
+      this.timeService.setPredefinedTime(this.predefinedTime);
+      this.timeService.timeDifference$.subscribe(
+        (timeDiff) => (this.timeDifference = timeDiff)
+      );
 
-  private calculateTimeDifference(currentTime: Date): void {
-    if (this.predefinedTime) {
-      const timeDiff = currentTime.getTime() - this.predefinedTime.getTime();
-      const seconds = Math.floor(timeDiff / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-
-      this.timeDifference = `${days} days, ${hours % 24} hours, ${
-        minutes % 60
-      } minutes, ${seconds % 60} seconds`;
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
+      setInterval(() => this.updateTime(), 1000);
     }
   }
 }

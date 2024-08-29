@@ -12,7 +12,7 @@ import { GetState } from '../../../services/get-state';
   styleUrls: ['./left-sidebar.component.css'],
 })
 export class LeftSidebarComponent implements OnInit {
-  constructor(private state: GetState) { }
+  constructor(private state: GetState) {}
   private routeSubscription: Subscription = new Subscription();
   menu_items: any[] = [];
 
@@ -31,14 +31,14 @@ export class LeftSidebarComponent implements OnInit {
           active: false,
         },
         {
-          title: "Today's Tickets",
-          router_link: '/hr/activity/today',
+          title: 'View Tickets',
+          router_link: '/admin/view-visits',
           icon: 'fas fa-calendar-day',
           active: false,
         },
         {
-          title: "Pending Visits",
-          router_link: '/hr/activity/pending',
+          title: 'Pending Visits',
+          router_link: '/admin/activity/pending',
           icon: 'pi pi-user-minus',
           active: false,
         },

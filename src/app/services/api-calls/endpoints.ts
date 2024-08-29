@@ -19,3 +19,4 @@ export const GET_USER_VISITATION_ACTIVITIES = `${baseUrl}/service/visit-activiti
 export const UPDATE_ACTIVITY_STATUS = `${baseUrl}/service/activity-in-progress/`;
 export const COMPLETE_ACTIVITY = `${baseUrl}/service/activity-completed/`;
 export const CANCEL_ACTIVITY = `${baseUrl}/service/activity-cancelled/`;
+export const GET_ALL_VISIT_DETAILS = `${baseUrl}/service/all-visits-report/`;
