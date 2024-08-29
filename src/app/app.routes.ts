@@ -14,9 +14,13 @@ import { LogoutComponent } from './components/authorization/logout/logout/logout
 import { StationsComponent } from './pages/admin/stations/stations.component';
 import { LayoutComponent } from './components/shared/layout/layout.component';
 import { ReportsComponent } from './pages/admin/reports/reports.component';
+import { LoginComponent } from './pages/login/login.component';
+import { guestGuard } from './core/guards/guest/guest.guard';
+import { authGuard } from './core/guards/auth/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: DefaultFormComponent, canActivate: [AuthGuard] },
+  { path: 'login', canActivate: [guestGuard], component: LoginComponent },
   {
     path: 'engineer',
     component: DefaultFormComponent,
