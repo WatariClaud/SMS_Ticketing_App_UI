@@ -35,7 +35,11 @@ export class DefaultFormComponent implements OnInit {
   onServiceSelected(serviceId: number): void {
     this.selectedServiceId = serviceId.toString();
   }
-  endSession() { }
+  endSession(): void {
+    this.sessionStorageService.clearAllSessions();
+    // refresh page
+    this.router.navigate(['/security/authenticate']);
+  }
 
   ngOnInit(): void {
     this.createTicketService

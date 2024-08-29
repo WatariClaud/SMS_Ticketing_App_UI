@@ -11,6 +11,9 @@ import { UserComponent } from './components/authorization/user/user/user.compone
 import { StationManagementComponent } from './components/authorization/admin/station-management/station-management/station-management.component';
 import { AdminWrapperComponent } from './components/authorization/admin/admin-wrapper/admin-wrapper.component';
 import { LogoutComponent } from './components/authorization/logout/logout/logout.component';
+import { StationsComponent } from './pages/admin/stations/stations.component';
+import { LayoutComponent } from './components/shared/layout/layout.component';
+import { ReportsComponent } from './pages/admin/reports/reports.component';
 
 export const routes: Routes = [
   { path: '', component: DefaultFormComponent, canActivate: [AuthGuard] },
@@ -19,18 +22,33 @@ export const routes: Routes = [
     component: DefaultFormComponent,
     canActivate: [AuthGuard],
   },
-  { path: 'admin', component: AdminWrapperComponent },
   {
-    path: 'admin/add-helpdesk',
-    component: StationManagementComponent,
-    canActivate: [AuthGuard],
+    path: 'admin',
+    component: LayoutComponent,
+    children: [
+      { path: '', component: AdminWrapperComponent },
+      { path: 'stations', component: StationsComponent },
+      { path: 'reports', component: ReportsComponent },
+      {
+        path: 'add-helpdesk',
+        component: StationManagementComponent,
+        canActivate: [AuthGuard],
+      },
+    ]
   },
-  { path: 'hr', component: TellerComponent },
-  { path: 'hr/login', component: TellerAuthComponent },
+  {
+    path: 'hr',
+    children: [
+      { path: '', component: TellerComponent },
+      { path: 'login', component: TellerAuthComponent },
+      { path: 'activity/current', component: TellerComponent },
+      { path: 'activity/pending', component: PendingActivitiesComponent },
+      { path: 'logout', component: LogoutComponent },
+    ]
+  },
+
   { path: 'create-user', component: UserComponent },
   { path: 'login-user', component: UserComponent },
-  { path: 'hr/activity/current', component: TellerComponent },
-  { path: 'hr/activity/pending', component: PendingActivitiesComponent },
   {
     path: 'security/authenticate',
     component: SecurityGuardAuthorizationComponent,
@@ -38,7 +56,6 @@ export const routes: Routes = [
   },
   { path: 'ticket_create/success', component: TicketActionsComponent },
   { path: 'ticket_create/error', component: TicketActionsComponent },
-  { path: 'hr/logout', component: LogoutComponent },
   { path: 'admin/logout', component: LogoutComponent },
   { path: '**', component: NotFoundComponent },
 ];

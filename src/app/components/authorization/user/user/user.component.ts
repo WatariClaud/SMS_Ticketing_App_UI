@@ -4,21 +4,24 @@ import { FormComponent } from '../../form/form.component';
 import { HasBgImageComponent } from '../../../has-bg-image/has-bg-image/has-bg-image.component';
 import guards_enrolled from '../../../../dummy-data/guards_enrolled';
 import { User } from '../../../../models/User';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
-    FormComponent, HasBgImageComponent
+    FormComponent,
+    HasBgImageComponent,
+    ButtonModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
-export class UserComponent implements OnInit{
+export class UserComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   path: string = '';
   isAddingNewUser: boolean = true;

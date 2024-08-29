@@ -31,6 +31,9 @@ import { GetUserService } from '../../../services/api-calls/get-user.service';
 import { GetActivityService } from '../../../services/api-calls/get-activity.service';
 import { CardModule } from 'primeng/card';
 import { ToastService } from '../../../services/toast/toast.service';
+import { MenuItem } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-form-component',
@@ -47,6 +50,8 @@ import { ToastService } from '../../../services/toast/toast.service';
     FormsModule,
     CurrentTimeComponent,
     CardModule,
+    MenuModule,
+    ButtonModule
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
@@ -59,6 +64,27 @@ export class FormComponent implements OnInit, OnDestroy {
   services: string[] = ['Service 1', 'Service 2', 'Service 3'];
   selectedServices: string[] = [];
   serviceControl = new FormControl();
+
+  changeUserTypes: MenuItem[] = [
+    {
+      label: 'Admin',
+      command: () => {
+        this.router.navigate(['/admin']);
+      },
+    },
+    {
+      label: 'Teller',
+      command: () => {
+        this.router.navigate(['/hr']);
+      },
+    },
+    {
+      label: 'Security',
+      command: () => {
+        this.router.navigate(['/']);
+      }
+    },
+  ];
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -68,7 +94,7 @@ export class FormComponent implements OnInit, OnDestroy {
     private createTicketService: CreateTicketService,
     private getActivityService: GetActivityService,
     private toastService: ToastService
-  ) {}
+  ) { }
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
   @Input() isGuardAuth: string = 'false';
