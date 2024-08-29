@@ -6,6 +6,7 @@ import { ButtonComponent } from '../button/button.component';
 import { CreateTicketService } from '../../../services/api-calls/create-ticket.service';
 import { SessionStorageService } from '../../../services/session/session-storage.service';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-default-form',
@@ -27,7 +28,8 @@ export class DefaultFormComponent implements OnInit {
   constructor(
     private router: Router,
     private createTicketService: CreateTicketService,
-    private sessionStorageService: SessionStorageService
+    private sessionStorageService: SessionStorageService,
+    private authService: AuthService,
   ) {
     this.is_engineer_route = this.router.url.includes('/engineer');
   }
@@ -43,7 +45,7 @@ export class DefaultFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.createTicketService
-      .create_ref_no(this.sessionStorageService.getHelpDeskToken() || '')
+      .create_ref_no(this.authService.getUserToken() ?? '')
       .subscribe({
         next: (data) => {
           this.ref_no = data.ref_no;

@@ -23,6 +23,10 @@ export class SessionStorageService {
   getHelpDeskToken(): string | null {
     return this.cookieService.get('hr-jwt');
   }
+
+  getGuardToken(): string | null {
+    return this.cookieService.get('guard_id');
+  }
   getGuardOnDuty(): string | null {
     return localStorage.getItem('guard_id');
   }

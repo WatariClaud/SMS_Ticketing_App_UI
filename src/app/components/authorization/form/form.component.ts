@@ -34,6 +34,7 @@ import { ToastService } from '../../../services/toast/toast.service';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-form-component',
@@ -93,7 +94,8 @@ export class FormComponent implements OnInit, OnDestroy {
     private sessionStorageService: SessionStorageService,
     private createTicketService: CreateTicketService,
     private getActivityService: GetActivityService,
-    private toastService: ToastService
+    private authService: AuthService,
+    private toastService: ToastService,
   ) { }
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
@@ -141,6 +143,8 @@ export class FormComponent implements OnInit, OnDestroy {
   );
 
   ngOnInit(): void {
+    this.token = this.authService.getUserToken();
+
     this.updateTime();
     this.createTicketService.create_ref_no(this.token).subscribe({
       next: (data) => {
@@ -151,20 +155,12 @@ export class FormComponent implements OnInit, OnDestroy {
     this.serviceControl.valueChanges.subscribe((selectedValues) => {
       this.selectedServices = selectedValues || [];
     });
-    console.log(this.selectedServices);
     this.intervalId = setInterval(() => this.updateTime(), 1000);
-    console.log(this.isGuardAuth);
 
     this.activatedRoute.url.subscribe((urlSegments) => {
       this.path = urlSegments.map((segment) => segment.path).join('/');
-      // this.modifyArrayBasedOnPath();
     });
 
-    this.token =
-      this.sessionStorageService.getHelpDeskToken() ||
-      this.sessionStorageService.getAdminToken() ||
-      this.sessionStorageService.getGuardOnDuty() ||
-      '';
 
     this.getUserService.getUsers(this.token).subscribe({
       next: (data) => {
@@ -291,6 +287,7 @@ export class FormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           console.log({ data });
+
           if (data.length > 0) {
             this.showNotification(
               'Desk is occupied, wait for your turn',

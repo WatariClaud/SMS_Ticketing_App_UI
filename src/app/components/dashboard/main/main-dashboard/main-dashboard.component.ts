@@ -43,7 +43,7 @@ export class MainDashboardComponent implements OnInit {
     private timeService: TimeService,
     private state: GetState,
     private router: Router
-  ) {}
+  ) { }
   private routeSubscription: Subscription = new Subscription();
   @Input() isTeller: boolean = false;
   @Input() isAdmin: boolean = false;
@@ -80,8 +80,8 @@ export class MainDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.token =
-      this.sessionStorageService.getHelpDeskToken() ||
-      this.sessionStorageService.getAdminToken() ||
+      this.sessionStorageService.getHelpDeskToken() ??
+      this.sessionStorageService.getAdminToken() ??
       '';
     this.current_activity = JSON.parse(
       localStorage.getItem('current_activity') || '{}'
