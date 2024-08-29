@@ -1,6 +1,5 @@
 .error, .success {
   width: 80vw;
-  max-width: 400px;
   margin: auto;
   padding: 2rem;
   position: absolute;

@@ -11,7 +11,37 @@ import {
   MatCardTitle,
 } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { ChipModule } from 'primeng/chip';
+import { ButtonModule } from 'primeng/button';
 
+/*
+{
+    "message": "Good Morning Aubrey Barrett, you will proceed to the following counters: Service 2 at C990. Your Ticket Number: undefined.",
+    "visit": {
+        "id": 68,
+        "reference_number": "undefined",
+        "customer_name": "Aubrey Barrett",
+        "phone_number": "+1 (607) 738-2399",
+        "status": "in_progress",
+        "visit_date_time": "2024-08-30T00:49:42.211162+03:00",
+        "total_service_time": "0:00:00",
+        "waiting_time": "0:00:00"
+    }
+}
+*/
+interface SingleTicket {
+  message: string;
+  visit: {
+    id: number;
+    reference_number: string;
+    customer_name: string;
+    phone_number: string;
+    status: string;
+    visit_date_time: string;
+    total_service_time: string;
+    waiting_time: string;
+  };
+}
 @Component({
   selector: 'app-ticket-actions',
   standalone: true,
@@ -22,6 +52,8 @@ import { MatListModule } from '@angular/material/list';
     MatCardTitle,
     MatCardContent,
     MatListModule,
+    ChipModule,
+    ButtonModule
   ],
   templateUrl: './ticket-actions.component.html',
   styleUrl: './ticket-actions.component.css',
@@ -63,11 +95,26 @@ export class TicketActionsComponent implements OnInit {
   service_name: string = '';
   started_on: string = '';
 
+  displayTicket: SingleTicket | null = null;
+
   ngOnInit(): void {
     if (this.hasValidTicket && this.ticket_details) {
       const ticket: Ticket = JSON.parse(this.ticket_details)[
         JSON.parse(this.ticket_details).length - 1
       ];
+
+      this.displayTicket = {
+        ...JSON.parse(this.ticket_details)[
+        JSON.parse(this.ticket_details).length - 1
+        ],
+        visit_date_time: formatTimestamp(
+          JSON.parse(this.ticket_details)[
+            JSON.parse(this.ticket_details).length - 1
+          ].visit_date_time
+        ),
+      };
+
+
       const activity: Activity = JSON.parse(this.ticket_activity_details)[
         JSON.parse(this.ticket_details).length - 1
       ];
@@ -77,8 +124,8 @@ export class TicketActionsComponent implements OnInit {
 
       this.ticket = {
         ...ticket,
-        id: ticket.id,
-        created_by: ticket.created_by,
+        start_time: new Date(ticket.start_time),
+        visit_date_time: new Date(ticket.visit_date_time),
       };
     }
   }
