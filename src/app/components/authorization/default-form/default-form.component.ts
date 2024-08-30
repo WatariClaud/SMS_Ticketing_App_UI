@@ -11,12 +11,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 @Component({
   selector: 'app-default-form',
   standalone: true,
-  imports: [
-    HasBgImageComponent,
-    FormComponent,
-    ButtonComponent,
-    ButtonModule
-  ],
+  imports: [HasBgImageComponent, FormComponent, ButtonComponent, ButtonModule],
   templateUrl: './default-form.component.html',
   styleUrl: './default-form.component.css',
 })
@@ -29,7 +24,7 @@ export class DefaultFormComponent implements OnInit {
     private router: Router,
     private createTicketService: CreateTicketService,
     private sessionStorageService: SessionStorageService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
     this.is_engineer_route = this.router.url.includes('/engineer');
   }
@@ -48,7 +43,8 @@ export class DefaultFormComponent implements OnInit {
       .create_ref_no(this.authService.getUserToken() ?? '')
       .subscribe({
         next: (data) => {
-          this.ref_no = data.ref_no;
+          console.log({ data });
+          this.ref_no = data.RefNo;
           // console.clear();
           // using local store to save time, may create service later
           localStorage.setItem('ticket_ref_number', this.ref_no);

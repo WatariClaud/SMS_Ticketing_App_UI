@@ -52,7 +52,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     CurrentTimeComponent,
     CardModule,
     MenuModule,
-    ButtonModule
+    ButtonModule,
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
@@ -83,7 +83,7 @@ export class FormComponent implements OnInit, OnDestroy {
       label: 'Security',
       command: () => {
         this.router.navigate(['/']);
-      }
+      },
     },
   ];
   constructor(
@@ -95,8 +95,8 @@ export class FormComponent implements OnInit, OnDestroy {
     private createTicketService: CreateTicketService,
     private getActivityService: GetActivityService,
     private authService: AuthService,
-    private toastService: ToastService,
-  ) { }
+    private toastService: ToastService
+  ) {}
   @Input() FormTitle = '';
   @Input() FormInputs: any = [];
   @Input() isGuardAuth: string = 'false';
@@ -146,12 +146,6 @@ export class FormComponent implements OnInit, OnDestroy {
     this.token = this.authService.getUserToken();
 
     this.updateTime();
-    this.createTicketService.create_ref_no(this.token).subscribe({
-      next: (data) => {
-        console.log('ticket_ref_number -> ', data);
-        localStorage.setItem('ticket_ref_number', data.ref_no);
-      },
-    });
     this.serviceControl.valueChanges.subscribe((selectedValues) => {
       this.selectedServices = selectedValues || [];
     });
@@ -160,7 +154,6 @@ export class FormComponent implements OnInit, OnDestroy {
     this.activatedRoute.url.subscribe((urlSegments) => {
       this.path = urlSegments.map((segment) => segment.path).join('/');
     });
-
 
     this.getUserService.getUsers(this.token).subscribe({
       next: (data) => {

@@ -40,7 +40,7 @@ export const routes: Routes = [
       {
         path: 'add-helpdesk',
         component: StationManagementComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
     ],
   },
@@ -61,7 +61,11 @@ export const routes: Routes = [
     component: SecurityGuardAuthorizationComponent,
     canActivate: [authGuard],
   },
-  { path: 'ticket_create/success', component: TicketActionsComponent, canActivate: [authGuard] },
+  {
+    path: 'ticket_create/success',
+    component: TicketActionsComponent,
+    canActivate: [authGuard],
+  },
   { path: 'ticket_create/error', component: TicketActionsComponent },
   { path: 'admin/logout', component: LogoutComponent },
   { path: '**', component: NotFoundComponent },
