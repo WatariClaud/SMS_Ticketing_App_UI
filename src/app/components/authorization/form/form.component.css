@@ -4,14 +4,6 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #333742;
-}
-
-
-.gridded {
-  display: grid;
-  grid-template-columns: 65% 35%;
-  height: 100vh;
 }
 
 .has-padding {
@@ -64,11 +56,11 @@ select {
   justify-content: flex-end;
 }
 
-.current-time {
-  font-size: 18px;
-  margin-top: 16px;
+.spacing {
+  margin-right: 2rem;
 }
-.current-time span {
-  color: rgb(255, 98, 0);
-  font-weight: 600;
+.mat-select {
+  background: rgba(220, 220, 220, 0.647);
+  min-height: 50px;
+  padding: 1rem;
 }

@@ -1,0 +1,22 @@
+<div class="sidebar" [ngClass]="{ minimized: isMinimized }">
+  <button class="toggle-btn" (click)="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="menu">
+    <ul>
+      @for (item of menu_items; track $index) { @if($index === menu_items.length
+      -1) {
+      <br /><br />
+      <hr />
+      }
+      <li>
+        <a (click)="setActive(item)" [ngClass]="{ active: item.active }">
+          <i [class]="item.icon"></i>
+          <span class="menu-text">{{ item.title }}</span>
+        </a>
+      </li>
+      }
+    </ul>
+  </div>
+</div>

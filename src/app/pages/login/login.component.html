@@ -1,0 +1,36 @@
+<div class="flex align-items-center justify-content-center h-full">
+  <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6 xl:w-4 md:w-5 sm:w-6 xs:w-7">
+    <div class="text-center mb-5">
+      <img
+        src="https://w7.pngwing.com/pngs/739/108/png-transparent-iphone-sms-computer-icons-text-messaging-sms-electronics-search-engine-optimization-text-thumbnail.png"
+        alt="Image" height="50" class="mb-3">
+      <div class="text-900 text-3xl font-medium mb-3">SMS Ticketing System</div>
+      <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+      <a routerLink="/create-user" class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
+    </div>
+
+    <form [formGroup]="loginForm" class="mb-5">
+      <div class="">
+        <label for="email1" class="block text-900 font-medium mb-2">Email</label>
+        <input id="email1" type="text" placeholder="Email address" pInputText class="w-full mb-3"
+          formControlName="email">
+      </div>
+
+      <div class="">
+        <label for="password1" class="block text-900 font-medium mb-2">Password</label>
+        <input id="password1" type="password" placeholder="Password" pInputText class="w-full mb-3"
+          formControlName="password">
+      </div>
+
+      <div class="flex align-items-center justify-content-between mb-6">
+        <div class="flex align-items-center">
+          <!-- <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox> -->
+          <label for="rememberme1" class="text-900">Remember me</label>
+        </div>
+        <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
+      </div>
+
+      <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full" (click)="submitForm()"></button>
+    </form>
+  </div>
+</div>

@@ -1,54 +1,53 @@
 @if(hasValidTicket !== 'true') {
-<div class="error" style="text-align: center; padding: 40px;">
+<div class="error" style="text-align: center; padding: 40px">
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <h1 style="color: red;">Invalid Ticket Action</h1>
+        <h1 style="color: red">Invalid Ticket Action</h1>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <h2>
-        <a href="/" style="color: blue; text-decoration: none;">Click here</a> to validate your action
+        <a href="/" style="color: blue; text-decoration: none">Click here</a> to
+        validate your action
       </h2>
     </mat-card-content>
   </mat-card>
 </div>
 } @else {
-<div class="success" style="padding: 40px;">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        <h3>Thank you for visiting our offices.<br />These are your ticket details</h3>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <table mat-table>
-        <tr mat-header-row *matHeaderRowDef="['key', 'value']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['key', 'value'];"></tr>
-        <ng-container matColumnDef="key">
-          <th mat-header-cell *matHeaderCellDef> Key </th>
-          <td mat-cell *matCellDef="let element"> {{ element.key }} </td>
-        </ng-container>
-        <ng-container matColumnDef="value">
-          <th mat-header-cell *matHeaderCellDef> Value </th>
-          <td mat-cell *matCellDef="let element"> {{ element.value }} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <mat-list>
-        <mat-list-item>
-          <strong>Ticket ID:</strong> <span>{{ ticket.id }}</span>
-        </mat-list-item>
-        <mat-list-item>
-          <strong>Customer Name:</strong> <span>{{ customer_name }}</span>
-        </mat-list-item>
-        <mat-list-item>
-          <strong>Requesting Service:</strong> <span>{{ service_name }}</span>
-        </mat-list-item>
-      </mat-list>
-      <p><strong>Initiated On:</strong> {{ started_on }}</p>
-    </mat-card-content>
-  </mat-card>
+<div class="success" style="text-align: center; padding: 40px">
+
+  <div class="surface-section">
+    <div class="font-medium text-3xl text-900 mb-3">Ticket Details</div>
+    <div class="text-500 mb-5">Thank you for visiting our offices. These are your ticket details:</div>
+    <ul class="list-none p-0 m-0">
+      <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+        <div class="text-500 w-6 md:w-2 font-medium">Ticket ID</div>
+        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">#{{ displayTicket?.visit?.id }}</div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+        <div class="text-500 w-6 md:w-2 font-medium">Customer Name</div>
+        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{ displayTicket?.visit?.customer_name }}</div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+        <div class="text-500 w-6 md:w-2 font-medium">Counter Assigned</div>
+        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{ displayTicket?.visit?.reference_number }}
+        </div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
+        <div class="text-500 w-6 md:w-2 font-medium">Details</div>
+        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
+          {{ displayTicket?.message }}
+          <div class="w-6 md:w-2 flex justify-content-end">
+            <button pButton pRipple label="Edit" icon="pi pi-pencil" class="p-button-text"></button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <br />
+  <a pButton pRipple icon="pi pi-check" class="p-button-raised p-button-rounded p-button-success" href="/">New
+    Ticket</a>
+
 </div>
 }

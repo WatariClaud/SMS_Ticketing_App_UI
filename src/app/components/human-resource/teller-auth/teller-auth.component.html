@@ -1,0 +1,19 @@
+<div class="gridded">
+  <app-has-bg-image></app-has-bg-image>
+  <app-form-component
+    FormTitle="Helpdesk Sign In"
+    [FormInputs]="[
+      {
+        id: 'email_address',
+        title: 'email_address'
+      },
+      {
+        id: 'password',
+        title: 'password'
+      }
+    ]"
+    isGuardAuth="false"
+    isAdminAuth="false"
+    [isAuthenticatingUser]="true"
+  ></app-form-component>
+</div>

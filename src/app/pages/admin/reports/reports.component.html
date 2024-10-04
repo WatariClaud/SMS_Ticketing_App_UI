@@ -1,0 +1,112 @@
+<div class=" px-4 py-5 md:px-6 lg:px-8">
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="stat-card shadow-2 p-3 border-round">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3">Total Visits</span>
+            <div class="text-900  font-medium text-xl">{{ report?.total_visits }}</div>
+          </div>
+          <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+            style="width:2.5rem;height:2.5rem">
+            <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="stat-card shadow-2 p-3 border-round">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3">Visits Today</span>
+            <div class="text-900 font-medium text-xl">{{ report?.total_visits_today }}</div>
+          </div>
+          <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+            style="width:2.5rem;height:2.5rem">
+            <i class="pi pi-map-marker text-orange-500 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="stat-card shadow-2 p-3 border-round">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3">Completed Visits</span>
+            <div class="text-900 font-medium text-xl">{{ report?.total_visit_statuses.completed }}</div>
+          </div>
+          <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+            style="width:2.5rem;height:2.5rem">
+            <i class="pi pi-inbox text-cyan-500 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="stat-card shadow-2 p-3 border-round">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3">Visists InProgress</span>
+            <div class="text-900 font-medium text-xl">{{ report?.total_visit_statuses.in_progress }}</div>
+          </div>
+          <div class="flex align-items-center justify-content-center bg-purple-100 border-round"
+            style="width:2.5rem;height:2.5rem">
+            <i class="pi pi-comment text-purple-500 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p-table [value]="visits" [tableStyle]="{'min-width': '50rem'}" [paginator]="true" [rows]="10"
+      responsiveLayout="scroll">
+      <ng-template pTemplate="caption">
+        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+          <span class="text-900 font-medium">Visits</span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th>ID </th>
+          <th>Reference Number</th>
+          <th>Customer Name</th>
+          <th>Phone Number</th>
+          <th>Status</th>
+          <th>Visit Date Time</th>
+          <th>Total Service Time</th>
+          <th>Waiting Time</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-visit let-columns="columns">
+        <tr>
+          <td>
+            {{ visit.id }}
+          </td>
+          <td>
+            {{ visit.reference_number }}
+          </td>
+          <td>
+            {{ visit.customer_name }}
+          </td>
+          <td>
+            {{ visit.phone_number }}
+          </td>
+          <td>
+            <p-tag [value]="visit.status" [severity]="getSeverity(visit.status)"></p-tag>
+          </td>
+          <td>
+            {{ visit.visit_date_time | date: 'medium' }}
+          </td>
+          <td>
+            {{ visit.total_service_time }}
+          </td>
+          <td>
+            {{ visit.waiting_time }}
+          </td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

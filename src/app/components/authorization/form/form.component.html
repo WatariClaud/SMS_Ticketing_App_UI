@@ -1,77 +1,135 @@
 <app-notifier [message]="notificationMessage" [type]="notificationType"></app-notifier>
 <form FormGroup="authForm">
   <div class="has-padding">
-    <mat-card>
+    <p-card>
       <mat-card-header>
         <mat-card-title>{{ FormTitle }}</mat-card-title>
       </mat-card-header>
       <br /><br />
       <mat-card-content>
-        @if(isGuardAuth === 'false') {
         @for(input of FormInputs; track input.id) {
-        <mat-form-field appearance="fill" class="input-box">
-          <mat-label>{{ input.title }}</mat-label>
-          @if(input.title) {
-          @if(input.title === 'mobile_number') {
+        <mat-form-field appearance="outline" class="input-box">
+          <mat-label>{{ input.title }}</mat-label>@if(input.title) { @if(input.title === 'mobile_number') {
           <input matInput type="tel" name="mobile_number" #mobileNumber />
-          }
-          @if(input.title === 'service_needed') {
-          <mat-select (selectionChange)="onServiceChange($event)">
+          } @if(input.title === 'desk_assigned') {
+          <mat-select (selectionChange)="onEntityChange($event)">
             <mat-option value="" disabled>Select service</mat-option>
             @if(services_available.length === 0) {
             <mat-option value="update_later_1">No services available</mat-option>
-            } @else {
-            @for(service of services_available; track service.id) {
-            <mat-option value="{{ service.id }}">{{ service.title }}</mat-option>
-            }
-            }
+            } @else { @for(service of services_available; track service.id) {
+            <mat-option value="{{ service.id }}">{{
+              service.title || service.name
+              }}</mat-option>
+            } }
           </mat-select>
-          }
-          @if(input.title === 'referred_by') {
+          } @if(input.title === 'managed_by') {
+          <mat-select (selectionChange)="onEntityChange($event)">
+            <mat-option value="" disabled>Select desk manager</mat-option>
+            @if(helpdesk_managers.length === 0) {
+            <mat-option value="update_later_1">No users available</mat-option>
+            } @else { @for(manager of helpdesk_managers; track manager.id) {
+            <mat-option value="{{ manager.id }}">{{
+              manager.name ? manager.name : "null"
+              }}</mat-option>
+            } }
+          </mat-select>
+          } @if(input.title === 'manreferred_byaged_by') {
           <input matInput type="text" name="referred_by" #ref_by />
-          }
-          @if(input.title === 'email_address') {
+          } @if(input.title === 'email_address') {
           <input matInput type="email" name="email" #email_address />
-          }
-          @if(input.title === 'password') {
+          } @if(input.title === 'name') {
+          <input matInput type="text" name="name" #name />
+          } @if(input.title === 'password') {
           <input matInput type="password" name="password" #password />
-          }
-          }
-        </mat-form-field>
-        }
-        } @else if(isGuardAuth === 'true'){
-        <mat-form-field appearance="fill" class="input-box">
-          <mat-label>Guard's Name</mat-label>
-          <mat-select name="security_guard_name" (selectionChange)="onGuardChange($event)">
-            <mat-option value="" disabled>Select Guard's name</mat-option>
-            @if(FormInputs.length === 0) {
-            <mat-option value="none">No services available</mat-option>
-            } @else {
-            @for(guard of FormInputs; track guard.id) {
-            <mat-option value="{{ guard.id }}">{{ guard.name }}</mat-option>
-            }
+          }@if(input.title === 'service_needed') {
+          <mat-select multiple (selectionChange)="onServiceChange($event)">
+            @for (service of services; track $index) {
+            <mat-option [value]="service">
+              {{ service }}
+            </mat-option>
             }
           </mat-select>
+          <mat-chip-listbox #chipList>
+            <!-- @for (service of selectedServices; track $index) {
+            <mat-chip [removable]="true" (removed)="remove(service)">
+              {{ service }}
+              <mat-icon matChipRemove>x</mat-icon>
+            </mat-chip>
+            } -->
+          </mat-chip-listbox>
+          } @if(isAddingNewUser === true) { @if(input.title === 'role') {
+          <mat-select name="user_role" (selectionChange)="onRoleChange($event)">
+            <mat-option value="" disabled>Select Role</mat-option>
+            @if(FormInputs.length === 0) {
+            <mat-option value="none">No roles available</mat-option>
+            } @else { @for(role of roles; track role.id) {
+            <mat-option value="{{ role.id }}">{{ role.title }}</mat-option>
+            } }
+          </mat-select>
+          } @if(input.title === 'teller_counter_name' && selectedRoleId !== '1')
+          {
+          <input matInput #hidden class="hidden" />
+          } } }
+        </mat-form-field>
+        } @if((selectedRole === 'Teller')) {
+        <mat-form-field appearance="outline" class="input-box">
+          <mat-label>Teller Counter</mat-label>
+          <input matInput type="text" name="teller_counter_name" #teller_counter_name />
         </mat-form-field>
         }
         <div class="input-box">
-          <div class="current-time">Current Time: <span>{{ currentTime }}</span></div>
+          <app-current-time></app-current-time>
         </div>
       </mat-card-content>
       <div class="input-box">
         <div class="ml">
           <mat-card-actions>
             @if(isGuardAuth === 'false') {
-            <app-button [ButtonText]="isAdminAuth === 'true' ? 'Sign In' : 'Create Ticket'"
-              [ButtonEvent]="isAdminAuth === 'true' ? authenticateAdmin.bind(this) : createTicket.bind(this)"></app-button>
-            }
-            @else if(isGuardAuth === 'true') {
-            <app-button ButtonText="Authenticate" [ButtonEvent]="startGuardSession.bind(this)"
-              (hasValidInput)="has_valid_selected"></app-button>
+            <div class="flex">
+              <app-button [ButtonText]="
+                  isLoadingRequest
+                    ? 'Sending Request...'
+                    : isAdminAuth === 'true'
+                    ? 'Sign In'
+                    : isAddingNewUser
+                    ? 'Create Account'
+                    : isAuthenticatingUser
+                    ? 'Log In'
+                    : isAddingNewStation
+                    ? 'Add Desk'
+                    : 'Create Ticket'
+                " [ButtonEvent]="
+                  isAdminAuth === 'true'
+                    ? authenticateAdmin.bind(this)
+                    : isAddingNewUser
+                    ? addUser.bind(this)
+                    : isAuthenticatingUser
+                    ? authUser.bind(this)
+                    : isAddingNewStation
+                    ? createDesk.bind(this)
+                    : createTicket.bind(this)
+                ">
+              </app-button>
+
+              @if(isAddingNewUser) {
+              <span class="spacing"></span><a href="/login-user">Already have an account?</a>
+              }
+            </div>
+            } @else if(isGuardAuth === 'true') {
+            <div class="grid gap-2">
+              <app-button ButtonText="Authenticate" [ButtonEvent]="startGuardSession.bind(this)"
+                (hasValidInput)="(has_valid_selected)"></app-button>
+
+              <div class="">
+                <p-menu [model]="changeUserTypes" #menu [popup]="true" />
+                <p-button label="Change User Type" icon="pi pi-angle-down" class="p-button-raised p-button-text"
+                  (click)="menu.toggle($event)" iconPos="right" onkeydown="menu.toggle($event)"></p-button>
+              </div>
+            </div>
             }
           </mat-card-actions>
         </div>
       </div>
-    </mat-card>
+    </p-card>
   </div>
 </form>

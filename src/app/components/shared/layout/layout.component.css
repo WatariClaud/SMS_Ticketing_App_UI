@@ -1,0 +1,13 @@
+.right-content {
+  width: calc(100% - 250px);
+  margin-left: 250px;
+  transition: margin-left 0.3s;
+}
+
+@media (max-width: 768px) {
+  .right-content {
+    width: calc(100% - 80px);
+    margin-left: 80px;
+  }
+}
+
